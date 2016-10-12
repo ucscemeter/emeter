@@ -68,7 +68,7 @@ var chart = c3.generate({
         threshold: {
 //            unit: 'value', // percentage is default
 //            max: 200, // 100 is default
-            values: [0, 33, 66, 100]
+            values: [25, 50, 75, 100]
         }
     },
     size: {
@@ -76,13 +76,20 @@ var chart = c3.generate({
     }
 });
 
+var direction = Math.round(Math.random())
+if (direction == 0) {
+  direction = direction - 1;
+}
 var lastNum = 0;
 document.body.onkeyup = function(e) {
-  if (e.keyCode == 32 || e.keyCode == 8) {
+  if (e.keyCode == 32 || e.keyCode == 8 || e.keyCode == 13) {
     var words = document.querySelector('#sq_100 textarea').value,
     num = words.match(/\w\w\w\w+/g).length;
+    //What you expected real AI here?
+    //This is just UI testing. Integrating models next. :)
     if (num != lastNum) {
-      var newVal = chart.data()[0].values[0]['value'] + Math.random()*10-4.25;
+      var addTo = direction * (Math.random()*10-4.35);
+      var newVal = chart.data()[0].values[0]['value'] + addTo
       if (newVal > 100) {
         newVal = 100;
       }
