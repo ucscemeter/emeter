@@ -3,7 +3,7 @@ var surveyJSON = { title: "",
   showProgressBar: 'bottom',
   pages: [
     { name:"page1", questions: [ 
-      { type: "comment", name: "experiences", title:"Step through each of the past 3 days (including today) and write an experience that you had from each day on a new line in the box below. Once you have chosen 3 events, please write a few sentences about how each experience affected you emotionally. You will recieve a notification after 3 minutes to continue to the next page." }
+      { type: "comment", name: "experiences", title:"Step through each of the past 3 days (including today) and write an experience that you had from each day on a new line in the box below. After you have chosen 3 events, for each event please write a few sentences about how that event affected you emotionally. You will recieve a notification after 3 minutes to continue to the next page." }
                ]},
       { name: "page2", questions: [
             { type: "matrix", name: "accuracies", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Strongly Negative"}, { value: 2, text: "Negative"}, { value: 3, text: "Slightly Negative"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Positive"}, { value: 6, text: "Positive"}, { value: 7, text: "Strongly Positive"}], rows: [{value: 'yourRating', text: "How positive or negative did you feeling your writing was?"}, {value: 'eRating', text: "How positive or negative did the e-meter assess your writing to be?"}], isRequired: true },
@@ -37,9 +37,9 @@ function sendDataToServer(survey) {
 
 survey.onCurrentPageChanged.add(function (sender, options) {
   if (survey.currentPage.visibleIndex == 0) {
-    document.querySelector('#emeter').style.display = '';
+    document.querySelector('#textAndMeter').style.display = '';
   } else {
-    document.querySelector('#emeter').style.display = 'none';
+    document.querySelector('#textAndMeter').style.display = 'none';
   }
 });
 
@@ -80,13 +80,25 @@ var direction = Math.round(Math.random())
 if (direction == 0) {
   direction = direction - 1;
 }
-var lastNum = 0;
+
+document.querySelector('.panel-footer input[value="Next"]').style.display = 'none';
+
+var lastNum = 0,
+    timerOn = false;
 document.body.onkeyup = function(e) {
   if (e.keyCode == 32 || e.keyCode == 8 || e.keyCode == 13) {
+    if (!timerOn) {
+      timerOn = true;
+      setTimeout(function() { 
+        alert("Please move to the following page");
+        document.querySelector('.panel-footer input[value="Next"]').style.display = '';
+      }, 180000);
+    }
     var words = document.querySelector('#sq_100 textarea').value,
     num = words.match(/\w\w\w\w+/g).length;
     //What you expected real AI here?
     //This is just UI testing. Integrating models next. :)
+    //Interested in algorithm UX? Shoot me an email alspring(at)ucsc(dot)edu
     if (num != lastNum) {
       var addTo = direction * (Math.random()*10-4.35);
       var newVal = chart.data()[0].values[0]['value'] + addTo
