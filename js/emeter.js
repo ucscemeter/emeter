@@ -3,23 +3,23 @@ var surveyJSON = { title: "",
   showProgressBar: 'bottom',
   pages: [
     { name:"page1", questions: [ 
-      { type: "comment", name: "experiences", title:"Step through each of the past 3 days (including today) and write an experience that you had from each day on a new line in the box below. After you have chosen 3 events, for each event please write a few sentences about how that event affected you emotionally. You will recieve a notification after 3 minutes to continue to the next page." }
+      { type: "comment", name: "experiences", title:"For each of the past 3 days: Choose one event that affected you emotionally and write a paragraph about how and why it affected you." }
                ]},
       { name: "page2", questions: [
             { type: "matrix", name: "accuracies", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Strongly Negative"}, { value: 2, text: "Negative"}, { value: 3, text: "Slightly Negative"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Positive"}, { value: 6, text: "Positive"}, { value: 7, text: "Strongly Positive"}], rows: [{value: 'yourRating', text: "How positive or negative did you feeling your writing was?"}, {value: 'eRating', text: "How positive or negative did the e-meter assess your writing to be?"}], isRequired: true },
-            { type: "matrix", name: "assessedAccuracy", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], rows: [{value: 'eRating', text: "How accurate was the E-meter in its assessment of your writing?"}], isRequired: true },
+            { type: "matrix", name: "assessedAccuracy", title: "-", columns: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], rows: [{value: 'eRating', text: "How accurate was the E-meter in its assessment of your writing?"}], isRequired: true },
        ] },
         { name: "page3",questions: [
-              { type: "comment", name: "accuracyReasons", title: "Please describe the reasons for your evaluations of the E-meter's accuracy. Why did you think it was inaccurate or accurate?" }, 
-              { type: "comment", name: "wouldYouUse", title: "Would you use a system like this for journaling? Please explain why." },
-              { type: "comment", name: "like", title: "What did you like about the system? (you may name as many things as occur to you)" }, ]},
+              { type: "comment", name: "accuracyReasons", title: "Please give 2 reasons for your evaluations of the E-meter's accuracy. Why did you think it was inaccurate or accurate?" }, 
+              { type: "comment", name: "wouldYouUse", title: "Would you use a system like this for journaling? Please give 2 reasons why or why not." },
+              { type: "comment", name: "like", title: "Please name 2 or more things you liked about the system." }, ]},
         { name: "page4", questions: [
-         { type: "comment", name: "dislike", title: "What did you dislike about the system? (you may name as many things as occur to you)" }, 
-              { type: "comment", name: "feedbackEffects", title: "How did the feedback from the algorithm affect your writing?" }, 
-              { type: "comment", name: "tips", title: "If you were given tips on how to make your writing about the experiences more positive, would you use them?" }, ]},
+         { type: "comment", name: "dislike", title: "Please name 2 or more things you disliked about the system." }, 
+              { type: "comment", name: "feedbackEffects", title: "Please give 2-3 ways the feedback from the algorithm affected your writing." }, 
+              { type: "comment", name: "tips", title: "Imagine that you were given personalized tips on how to make your writing about the experiences more positive from the web page. Please give 2 reasons why you would or would not you use them." }, ]},
           { name: "page5", questions: [
-              { type: "comment", name: "folkTheory", title: "How do you think the system judges your writing?" }, 
-              { type: "comment", name: "generalReactions", title: "What are your general reactions to this application. Please explain." }, 
+              { type: "comment", name: "folkTheory", title: "Please explain how do you think the system judges your writing." }, 
+              { type: "comment", name: "generalReactions", title: "Please give 3 or more sentences detailing your general reactions to this application." }, 
         ] }
      ]
 };
@@ -81,7 +81,7 @@ if (direction == 0) {
   direction = direction - 1;
 }
 
-document.querySelector('.panel-footer input[value="Next"]').style.display = 'none';
+//document.querySelector('.panel-footer input[value="Next"]').style.display = 'none';
 
 var lastNum = 0,
     timerOn = false;
@@ -89,10 +89,10 @@ document.body.onkeyup = function(e) {
   if (e.keyCode == 32 || e.keyCode == 8 || e.keyCode == 13) {
     if (!timerOn) {
       timerOn = true;
-      setTimeout(function() { 
+      /*setTimeout(function() { 
         alert("Please move to the following page");
         document.querySelector('.panel-footer input[value="Next"]').style.display = '';
-      }, 180000);
+      }, 180000);*/
     }
     var words = document.querySelector('#sq_100 textarea').value,
     num = words.match(/\w\w\w\w+/g).length;
