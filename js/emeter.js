@@ -13,29 +13,33 @@ var surveyJSON = { title: "",
         { name: "page3",questions: [
             { type: "matrix", name: "assessedAccuracy", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], rows: [{value: 'eRating', text: "How accurate was the E-meter in its assessment of your writing?"}, {value: 'futureAccuracy', text: "If you were to use the system again how accurate do you think it would be?"}], isRequired: true },
           ] },
-      //make sure people can't look back on questions to frame current answers
         { name: "page4",questions: [
+            { type: "matrix", name: "systemTrust", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Not at all"}, { value: 2, text: "Slightly"}, { value: 3, text: "Moderately"}, { value: 4, text: "Very"}, { value: 5, text: "Extremely"}, ], rows: [{value: 'trustRating', text: "How trustworthy did you find the E-meter system?"}], isRequired: true },
+              { type: "comment", name: "trustReasons", title: "Please explain why you chose your indicated level of trust." }
+          ] },
+      //make sure people can't look back on questions to frame current answers
+        { name: "page5",questions: [
               { type: "comment", name: "accuracyReasons", title: "Please give 2 reasons for your evaluations of the E-meter's accuracy. Why did you think it was inaccurate or accurate?" }
             ]}, 
-        { name: "page5", questions: [
+        { name: "page6", questions: [
               { type: "comment", name: "like", title: "Please name 2 or more things you liked about the system." }, //up for grabs (reevaluate feedback from question) (what did this system do for you?) (did this change how you thought about yourself)
               { type: "comment", name: "dislike", title: "Please name 2 or more things you disliked about the system." }, // up for grabs (reevaluate feedback from question)
             ]}, 
-        { name: "page6", questions: [
+        { name: "page7", questions: [
               { type: "comment", name: "feedbackEffects", title: "Please give 2-3 ways the feedback from the algorithm affected your writing." }, 
           ] },
             
-          { name: "page7", questions: [
+          { name: "page8", questions: [
               { type: "comment", name: "tips", title: "Imagine that you were given personalized tips on how to improve you mood based on what you wrote. Would you make use of such suggestions?" },  //imagine you were given personalized tips to improve your mood 
           ] },
-          { name: "page8", questions: [
+          { name: "page9", questions: [
               { type: "comment", name: "folkTheory", title: "Please explain how do you think the system judges your writing." }, 
               { type: "comment", name: "testing", title: "Did you experiment with or manipulate your writing to test how the system was working or how accurate it was? If so, how?" }, //rephrase this (did you experiment/manipulate your writing to test how the system was working and how accurate it was. explain--
         ] },
-          { name: "page9", questions: [
+          { name: "page10", questions: [
               { type: "comment", name: "generalReactions", title: "If you have any additional feedback from your interaction with the E-meter, please detail it here." }, //put on own page/get rid of.
           ] },
-          { name: "page10", questions: [
+          { name: "page11", questions: [
           //add debrief  (
               { type: "html", name: "postDebriefComments", html: "<p>In order to assess how people interact with computer programs like the E-meter, the E-meter actually moved randomly each time you typed a word containing more than 4 characters. Previous studies indicate that many people will simply trust the algorithm rather than carefully evaluating it. This was a secondary hypothesis in this experiment. The E-meter was not responding to your typing and made no actual judgment on your writing.</p>" },  //how can we offer better support to the testers of algorithmic systems (
               { type: "html", name: "confirmationCode", html: "<h3>Confirmation Code: " + confirmationCode + "</h3><p>Please copy and paste this into the Mechanical Turk survey code field</p>"},
