@@ -1,10 +1,11 @@
 var confirmationCode = Math.floor(Math.random() * 1000000)
+var began = new Date();
 var surveyJSON = { title: "", 
   surveyPostId: '70ad9ad7-5266-48af-a28a-05b978363cf6',
   showProgressBar: 'bottom',
   pages: [
     { name:"page1", questions: [ 
-      { type: "comment", name: "experiences", title:"For each of the past 3 days: Choose one event that affected you emotionally and write a paragraph about how and why it affected you." }
+      { type: "comment", name: "experiences", title:"For each of the past 3 days: Choose one event that affected you emotionally and write a paragraph about how and why it affected you.", isRequired: true }
                ]},
       { name: "page2", questions: [
             { type: "matrix", name: "accuracies", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Strongly Negative"}, { value: 2, text: "Negative"}, { value: 3, text: "Slightly Negative"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Positive"}, { value: 6, text: "Positive"}, { value: 7, text: "Strongly Positive"}], rows: [{value: 'yourRating', text: "How positive or negative did you feeling your writing was?"}, {value: 'eRating', text: "How positive or negative did the e-meter assess your writing to be?"}], isRequired: true },
@@ -15,29 +16,29 @@ var surveyJSON = { title: "",
           ] },
         { name: "page4",questions: [
             { type: "matrix", name: "systemTrust", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Not at all"}, { value: 2, text: "Slightly"}, { value: 3, text: "Moderately"}, { value: 4, text: "Very"}, { value: 5, text: "Extremely"}, ], rows: [{value: 'trustRating', text: "How trustworthy did you find the E-meter system?"}], isRequired: true },
-              { type: "comment", name: "trustReasons", title: "Please explain why you chose your indicated level of trust." }
+              { type: "comment", name: "trustReasons", title: "Please explain why you chose your indicated level of trust.", isRequired: true }
           ] },
       //make sure people can't look back on questions to frame current answers
         { name: "page5",questions: [
-              { type: "comment", name: "accuracyReasons", title: "Please give 2 reasons for your evaluations of the E-meter's accuracy. Why did you think it was inaccurate or accurate?" }
+              { type: "comment", name: "accuracyReasons", title: "Please give 2 reasons for your evaluations of the E-meter's accuracy. Why did you think it was inaccurate or accurate?", isRequired: true }
             ]}, 
         { name: "page6", questions: [
-              { type: "comment", name: "like", title: "Please name 2 or more things you liked about the system." }, //up for grabs (reevaluate feedback from question) (what did this system do for you?) (did this change how you thought about yourself)
-              { type: "comment", name: "dislike", title: "Please name 2 or more things you disliked about the system." }, // up for grabs (reevaluate feedback from question)
+              { type: "comment", name: "like", title: "Please name 2 or more things you liked about the system.", isRequired: true }, //up for grabs (reevaluate feedback from question) (what did this system do for you?) (did this change how you thought about yourself)
+              { type: "comment", name: "dislike", title: "Please name 2 or more things you disliked about the system.", isRequired: true }, // up for grabs (reevaluate feedback from question)
             ]}, 
         { name: "page7", questions: [
-              { type: "comment", name: "feedbackEffects", title: "Please give 2-3 ways the feedback from the algorithm affected your writing." }, 
+              { type: "comment", name: "feedbackEffects", title: "Please give 2-3 ways the feedback from the algorithm affected your writing.", isRequired: true }, 
           ] },
             
           { name: "page8", questions: [
-              { type: "comment", name: "tips", title: "Imagine that you were given personalized tips on how to improve you mood based on what you wrote. Would you make use of such suggestions?" },  //imagine you were given personalized tips to improve your mood 
+              { type: "comment", name: "tips", title: "Imagine that you were given personalized tips on how to improve you mood based on what you wrote. Would you make use of such suggestions?", isRequired: true },  //imagine you were given personalized tips to improve your mood 
           ] },
           { name: "page9", questions: [
-              { type: "comment", name: "folkTheory", title: "Please explain how do you think the system judges your writing." }, 
-              { type: "comment", name: "testing", title: "Did you experiment with or manipulate your writing to test how the system was working or how accurate it was? If so, how?" }, //rephrase this (did you experiment/manipulate your writing to test how the system was working and how accurate it was. explain--
+              { type: "comment", name: "folkTheory", title: "Please explain how do you think the system judges your writing.", isRequired: true }, 
+              { type: "comment", name: "testing", title: "Did you experiment with or manipulate your writing to test how the system was working or how accurate it was? If so, how?", isRequired: true }, //rephrase this (did you experiment/manipulate your writing to test how the system was working and how accurate it was. explain--
         ] },
           { name: "page10", questions: [
-              { type: "comment", name: "generalReactions", title: "If you have any additional feedback from your interaction with the E-meter, please detail it here." }, //put on own page/get rid of.
+              { type: "comment", name: "generalReactions", title: "If you have any additional feedback from your interaction with the E-meter, please detail it here.", isRequired: true }, //put on own page/get rid of.
           ] },
           { name: "page11", questions: [
           //add debrief  (
@@ -55,6 +56,7 @@ survey.onComplete.add(sendDataToServer);
 survey.setValue('confirmationCode', confirmationCode)
 
 function sendDataToServer(survey) {
+  survey.setValue('timeElapsed', new Date() - began);
   //You should get the Guid for storing survey data in dxSurvey.com
   survey.sendResult('70ad9ad7-5266-48af-a28a-05b978363cf6');
 }
