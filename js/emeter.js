@@ -1,11 +1,13 @@
-var confirmationCode = Math.floor(Math.random() * 1000000)
+var confirmationCode = Math.floor(Math.random() * 1000000),
+machineLearningCondition = Math.floor(Math.random() * 2) ? 'transparent' : 'control',
+experienceNode = null;
 var began = new Date();
 var surveyJSON = { title: "", 
-  surveyPostId: '70ad9ad7-5266-48af-a28a-05b978363cf6',
+  surveyPostId: '516ed990-1ffe-4157-9f38-4ebabda5fe33',
   showProgressBar: 'bottom',
   pages: [
     { name:"page1", questions: [ 
-      { type: "html", name: "experiences", title:"For each of the past 3 days: Choose one event that affected you emotionally and write a paragraph about how and why it affected you.", html:'<center><p><b>Please write at least 50 words about an emotional experience that affected you in the last week.</b></p></center><center><span id="wordcount">0/50 words</span></center><div id="text" contenteditable class="textarea form-control"></div>', isRequired: true }
+      { type: "html", name: "experiences", title:"experience", html:'<div id="expquestion"><center><h5>Please write at least 100 words about an emotional experience that affected you in the last week.</h5></center><center><span id="wordcount">0/100 words</span></center><div id="text" contenteditable class="textarea form-control"></div></div>', isRequired: true }
                ]},
       { name: "page2", questions: [
             { type: "matrix", name: "accuracies", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Strongly Negative"}, { value: 2, text: "Negative"}, { value: 3, text: "Slightly Negative"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Positive"}, { value: 6, text: "Positive"}, { value: 7, text: "Strongly Positive"}], rows: [{value: 'yourRating', text: "How positive or negative did you feel your writing was?"}, {value: 'eRating', text: "How positive or negative did the e-meter assess your writing to be?"}], isRequired: true },
@@ -14,14 +16,14 @@ var surveyJSON = { title: "",
         { name: "page3",questions: [
             { type: "matrix", name: "assessedAccuracy", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], rows: [{value: 'eRating', text: "How accurate was the E-meter in its assessment of your writing?"}, {value: 'futureAccuracy', text: "If you were to use the system again how accurate do you think it would be?"}], isRequired: true },
           ] },
+//make sure people can't look back on questions to frame current answers
         { name: "page4",questions: [
+              { type: "comment", name: "accuracyReasons", title: "Please give 2 reasons for your evaluations of the E-meter's accuracy. Why did you think it was inaccurate or accurate?", isRequired: true }
+            ]},
+        { name: "page5",questions: [
             { type: "matrix", name: "systemTrust", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Not at all"}, { value: 2, text: "Slightly"}, { value: 3, text: "Moderately"}, { value: 4, text: "Very"}, { value: 5, text: "Extremely"}, ], rows: [{value: 'trustRating', text: "How trustworthy did you find the E-meter system?"}], isRequired: true },
               { type: "comment", name: "trustReasons", title: "Please explain why you chose your indicated level of trust.", isRequired: true }
           ] },
-      //make sure people can't look back on questions to frame current answers
-        { name: "page5",questions: [
-              { type: "comment", name: "accuracyReasons", title: "Please give 2 reasons for your evaluations of the E-meter's accuracy. Why did you think it was inaccurate or accurate?", isRequired: true }
-            ]}, 
         { name: "page6", questions: [
               { type: "comment", name: "like", title: "Please name 2 or more things you liked about the system.", isRequired: true }, //up for grabs (reevaluate feedback from question) (what did this system do for you?) (did this change how you thought about yourself)
               { type: "comment", name: "dislike", title: "Please name 2 or more things you disliked about the system.", isRequired: true }, // up for grabs (reevaluate feedback from question)
@@ -42,7 +44,6 @@ var surveyJSON = { title: "",
           ] },
           { name: "page11", questions: [
           //add debrief  (
-              { type: "html", name: "postDebriefComments", html: "<p>In order to assess how people interact with computer programs like the E-meter, the E-meter actually moved randomly each time you typed a word containing more than 4 characters. Previous studies indicate that many people will simply trust the algorithm rather than carefully evaluating it. This was a secondary hypothesis in this experiment. The E-meter was not responding to your typing and made no actual judgment on your writing.</p>" },  //how can we offer better support to the testers of algorithmic systems (
               { type: "html", name: "confirmationCode", html: "<h3>Confirmation Code: " + confirmationCode + "</h3><p>Please copy and paste this into the Mechanical Turk survey code field</p>"},
           ] }
      ]
@@ -54,6 +55,7 @@ survey.sendResultOnPageNext = true;
 survey.clientId = Math.random();
 survey.onComplete.add(sendDataToServer);
 survey.setValue('confirmationCode', confirmationCode)
+survey.setValue('transparency', machineLearningCondition)
 
 function sendDataToServer(survey) {
   survey.setValue('timeElapsed', new Date() - began);
@@ -64,6 +66,7 @@ function sendDataToServer(survey) {
 survey.onCurrentPageChanged.add(function (sender, options) {
   if (survey.currentPage.visibleIndex == 0) {
     document.querySelector('#textAndMeter').style.display = '';
+    $('#expquestion').replaceWith(experienceNode);
   } else {
     document.querySelector('#textAndMeter').style.display = 'none';
   }
@@ -107,92 +110,76 @@ if (direction == 0) {
   direction = direction - 1;
 }
 
-function saveCaretPosition(context){
-    var selection = window.getSelection();
-    var range = selection.getRangeAt(0);
-    range.setStart(  context, 0 );
-    var len = range.toString().length;
-
-    return function restore(){
-        var pos = getTextNodeAtPosition(context, len);
-        selection.removeAllRanges();
-        var range = new Range();
-        range.setStart(pos.node ,pos.position);
-        selection.addRange(range);
-
-    }
-}
-
-function getTextNodeAtPosition(root, index){
-    var lastNode = null;
-
-    var treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT,function next(elem) {
-        if(index > elem.textContent.length){
-            index -= elem.textContent.length;
-            lastNode = elem;
-            return NodeFilter.FILTER_REJECT
-        }
-        return NodeFilter.FILTER_ACCEPT;
-    });
-    var c = treeWalker.nextNode();
-    return {
-        node: c? c: root,
-        position: c? index:  0
-    };
-}
 //document.querySelector('.panel-footer input[value="Next"]').style.display = 'none';
+
+function SetCaretPosition(el, pos){
+
+    // Loop through all child nodes
+    for(var i = 0; i < el.childNodes.length; i++){
+        var node = el.childNodes[i];
+        if(node.nodeType == 3){ // we have a text node
+            if(node.length >= pos){
+                // finally add our range
+                var range = document.createRange(),
+                    sel = window.getSelection();
+                range.setStart(node,pos);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+                return -1; // we are done
+            }else{
+                pos -= node.length;
+            }
+        }else{
+            pos = SetCaretPosition(node,pos);
+            if(pos == -1){
+                return -1; // no need to finish the for loop
+            }
+        }
+    }
+    return pos; // needed because of recursion stuff
+}
 
 var lastWord = '',
     timerOn = false;
 document.body.onkeyup = function(e) {
   if (survey.currentPage.visibleIndex == 0) {
     if (e.keyCode == 32 || e.keyCode == 8 || e.keyCode == 13) {
-      if (!timerOn) {
-        timerOn = true;
-        /*setTimeout(function() { 
-          alert("Please move to the following page");
-          document.querySelector('.panel-footer input[value="Next"]').style.display = '';
-        }, 180000);*/
-      }
-      var restore = saveCaretPosition(this);
-      var words = $('#text').text().split(' '),
-      newWord = words.filter(function(word) { return word != ""})[words.length - 1];
-      $('#wordcount').text(words.length + '/50 words');
-      //console.log(lastWord);
+      var words = $('#text').text().split(/\s/);
+      $('#wordcount').text(words.length + '/100 words');
       //Interested in algorithm UX? Shoot me an email alspring(at)ucsc(dot)edu
-      //if (newWord != lastWord) {
-        //var newVal = chart.data()[0].values[0]['value'] + predict(newWord)/10.0
         var written_text = $('#text').text(),
         newVal = predict_all(written_text),
+        pos = $('#text').caret('pos'),
         word_colors = make_words_colors_dict(written_text);
-        //console.log(written_text);
-        for (var key in word_colors) {
-          written_text = written_text.replace(new RegExp('\\b' + key + '\\b', 'gi'),
-            function (match) {
-              //console.log(match);
-              return '<span style="background-color: ' + word_colors[key] + ';">' + match + '</span>';
-          });
+        if (machineLearningCondition === 'transparent') {
+          for (var key in word_colors) {
+            written_text = written_text.replace(new RegExp('\\b' + key + '\\b', 'gi'),
+              function (match) {
+                return '<span style="background-color: ' + word_colors[key] + ';">' + match + '</span>';
+            });
+          }
+          $('#text').html(written_text);
+          $('#text').caret('pos', pos);
         }
-        //console.log(written_text);
-        $('#text').html(written_text);
-        restore();
-        //console.log(newVal);
+        //restore();
         /*if (newVal > 100) {
           newVal = 100;
         } else if (newVal < 0) {
           newVal = 0;
         }*/
+        experienceNode = $('#expquestion');
         survey.setValue('finalEmeterValue', newVal);
         chart.load({
               columns: [['Positivity', newVal]]
         });
-        lastWord = newWord;
       //}
    }
   }
 }
 
 $(document).ready(function() {
+  experienceNode = $('#expquestion');
   /*$('#btn-explain').click(function (e) {
     $('#explanation').append('blahblahtext');
     var textarea = $('textarea'),
