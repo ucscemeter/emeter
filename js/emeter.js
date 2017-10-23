@@ -14,7 +14,7 @@ var surveyJSON = { title: "",
             //to what extent do you trust the system and why (quant and qualitative)
        ] },
         { name: "page3",questions: [
-            { type: "matrix", name: "assessedAccuracy", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], rows: [{value: 'eRating', text: "How accurate was the E-meter in its assessment of your writing?"}, {value: 'futureAccuracy', text: "If you were to use the system again how accurate do you think it would be?"}], isRequired: true },
+            { type: "matrix", name: "assessedAccuracy", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], rows: [{value: 'currentAccuracy', text: "How accurate was the E-meter in its assessment of your writing?"}, {value: 'futureAccuracy', text: "If you were to use the system again how accurate do you think it would be?"}], isRequired: true },
           ] },
 //make sure people can't look back on questions to frame current answers
         { name: "page4",questions: [
@@ -56,6 +56,7 @@ survey.clientId = Math.random();
 survey.onComplete.add(sendDataToServer);
 survey.setValue('confirmationCode', confirmationCode)
 survey.setValue('transparency', machineLearningCondition)
+survey.setValue('writtenText', '')
 
 function sendDataToServer(survey) {
   survey.setValue('timeElapsed', new Date() - began);
@@ -149,9 +150,11 @@ document.body.onkeyup = function(e) {
       $('#wordcount').text(words.length + '/100 words');
       //Interested in algorithm UX? Shoot me an email alspring(at)ucsc(dot)edu
         var written_text = $('#text').text(),
+
         newVal = predict_all(written_text),
         pos = $('#text').caret('pos'),
         word_colors = make_words_colors_dict(written_text);
+        survey.setValue('writtenText', written_text);
         if (machineLearningCondition === 'transparent') {
           for (var key in word_colors) {
             written_text = written_text.replace(new RegExp('\\b' + key + '\\b', 'gi'),
