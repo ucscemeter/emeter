@@ -180,6 +180,11 @@ document.body.onkeyup = function(e) {
 
 $(document).ready(function() {
   experienceNode = $('#expquestion');
+  if(machineLearningCondition === 'transparent') {
+    $('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the question below. Individual words you type will be highlighted according to whether they contribute towards a positive mood direction or negative mood direction.');
+  } else {
+    $('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the question below.');
+  }
   /*$('#btn-explain').click(function (e) {
     $('#explanation').append('blahblahtext');
     var textarea = $('textarea'),
