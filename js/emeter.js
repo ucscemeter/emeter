@@ -5,7 +5,7 @@ var surveyJSON = { title: "",
   showProgressBar: 'bottom',
   pages: [
     { name:"page1", questions: [ 
-      { type: "comment", name: "experiences", title:"For each of the past 3 days: Choose one event that affected you emotionally and write a paragraph about how and why it affected you.", isRequired: true }
+      { type: "html", name: "experiences", title:"For each of the past 3 days: Choose one event that affected you emotionally and write a paragraph about how and why it affected you.", html:'<center><p><b>Please write at least 50 words about an emotional experience that affected you in the last week.</b></p></center><center><span id="wordcount">0/50 words</span></center><div id="text" contenteditable class="textarea form-control"></div>', isRequired: true }
                ]},
       { name: "page2", questions: [
             { type: "matrix", name: "accuracies", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Strongly Negative"}, { value: 2, text: "Negative"}, { value: 3, text: "Slightly Negative"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Positive"}, { value: 6, text: "Positive"}, { value: 7, text: "Strongly Positive"}], rows: [{value: 'yourRating', text: "How positive or negative did you feel your writing was?"}, {value: 'eRating', text: "How positive or negative did the e-meter assess your writing to be?"}], isRequired: true },
@@ -73,7 +73,7 @@ var chart = c3.generate({
     bindto: "#emeter",
     data: {
         columns: [
-            ['Positivity', 50]
+            ['Positivity', 63.333]
         ],
         type: 'gauge',
     },
@@ -90,11 +90,11 @@ var chart = c3.generate({
 //    width: 39 // for adjusting arc thickness
     },
     color: {
-        pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'], // the three color levels for the percentage values.
+        pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044', '#3d6e2b'], // the three color levels for the percentage values.
         threshold: {
 //            unit: 'value', // percentage is default
 //            max: 200, // 100 is default
-            values: [25, 50, 75, 100]
+            values: [15, 35, 50, 75]
         }
     },
     size: {
@@ -107,9 +107,42 @@ if (direction == 0) {
   direction = direction - 1;
 }
 
+function saveCaretPosition(context){
+    var selection = window.getSelection();
+    var range = selection.getRangeAt(0);
+    range.setStart(  context, 0 );
+    var len = range.toString().length;
+
+    return function restore(){
+        var pos = getTextNodeAtPosition(context, len);
+        selection.removeAllRanges();
+        var range = new Range();
+        range.setStart(pos.node ,pos.position);
+        selection.addRange(range);
+
+    }
+}
+
+function getTextNodeAtPosition(root, index){
+    var lastNode = null;
+
+    var treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT,function next(elem) {
+        if(index > elem.textContent.length){
+            index -= elem.textContent.length;
+            lastNode = elem;
+            return NodeFilter.FILTER_REJECT
+        }
+        return NodeFilter.FILTER_ACCEPT;
+    });
+    var c = treeWalker.nextNode();
+    return {
+        node: c? c: root,
+        position: c? index:  0
+    };
+}
 //document.querySelector('.panel-footer input[value="Next"]').style.display = 'none';
 
-var lastNum = 0,
+var lastWord = '',
     timerOn = false;
 document.body.onkeyup = function(e) {
   if (survey.currentPage.visibleIndex == 0) {
@@ -121,26 +154,58 @@ document.body.onkeyup = function(e) {
           document.querySelector('.panel-footer input[value="Next"]').style.display = '';
         }, 180000);*/
       }
-      var words = document.querySelector('#sq_100 textarea').value,
-      num = words.match(/\w\w\w\w+/g).length;
-      //What you expected real AI here?
-      //This is just UI testing. Integrating models next. :)
+      var restore = saveCaretPosition(this);
+      var words = $('#text').text().split(' '),
+      newWord = words.filter(function(word) { return word != ""})[words.length - 1];
+      $('#wordcount').text(words.length + '/50 words');
+      //console.log(lastWord);
       //Interested in algorithm UX? Shoot me an email alspring(at)ucsc(dot)edu
-      if (num != lastNum) {
-        var addTo = direction * (Math.random()*10-4.35);
-        var newVal = chart.data()[0].values[0]['value'] + addTo
-        if (newVal > 100) {
-          newVal = 100;
+      //if (newWord != lastWord) {
+        //var newVal = chart.data()[0].values[0]['value'] + predict(newWord)/10.0
+        var written_text = $('#text').text(),
+        newVal = predict_all(written_text),
+        word_colors = make_words_colors_dict(written_text);
+        //console.log(written_text);
+        for (var key in word_colors) {
+          written_text = written_text.replace(new RegExp('\\b' + key + '\\b', 'gi'),
+            function (match) {
+              //console.log(match);
+              return '<span style="background-color: ' + word_colors[key] + ';">' + match + '</span>';
+          });
         }
+        //console.log(written_text);
+        $('#text').html(written_text);
+        restore();
+        //console.log(newVal);
+        /*if (newVal > 100) {
+          newVal = 100;
+        } else if (newVal < 0) {
+          newVal = 0;
+        }*/
         survey.setValue('finalEmeterValue', newVal);
         chart.load({
               columns: [['Positivity', newVal]]
         });
-        lastNum = num;
-      }
-    }
+        lastWord = newWord;
+      //}
+   }
   }
 }
+
+$(document).ready(function() {
+  /*$('#btn-explain').click(function (e) {
+    $('#explanation').append('blahblahtext');
+    var textarea = $('textarea'),
+    words = clean_split_words(textarea.val());
+    for(var i = 0; i < words.length; i++) {
+      var score = predict(words[i]);
+      switch(score){
+      case i:
+        break;
+    }
+    }*/
+  //});
+});
 
 // device detection
 if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) 
