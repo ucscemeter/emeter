@@ -1,51 +1,63 @@
 var confirmationCode = Math.floor(Math.random() * 1000000),
-machineLearningCondition = Math.floor(Math.random() * 2) ? 'transparent' : 'control',
+machineLearningCondition = 'transparent'//Math.floor(Math.random() * 2) ? 'transparent' : 'control',
 experienceNode = null;
 var began = new Date();
 var surveyJSON = { title: "", 
-  surveyPostId: '516ed990-1ffe-4157-9f38-4ebabda5fe33',
+  //surveyPostId: '516ed990-1ffe-4157-9f38-4ebabda5fe33',
+  surveyPostId: 'd42dc904-3840-4805-973d-cc2a0a350e64',
   showProgressBar: 'bottom',
   pages: [
+    { name:"page0", questions: [{
+      type: "html",
+      name: "info", 
+      html: ' <div class="row"> <p><strong>U</strong><strong>NI</strong><strong>V</strong><strong>ER</strong><strong>S</strong><strong>ITY </strong><strong>O</strong><strong>F CALIFORNIA, SANTA CRUZ</strong></p> <p style="margin-left:-2.0pt;">Name: Prof. Steve Whittaker</p> <p style="margin-left:-2.0pt;">Department of: Psychology</p> <p style="margin-left:-2.0pt;">Email: swhittak@ucsc.edu</p> <p style="margin-left:-2.0pt;">Phone: (831) 459-2390</p> <p align="center" style="margin-left:-2.0pt;"><strong>CONSENT TO PARTICIPATE IN RESEARCH</strong></p> <p align="center" style="margin-left:-2.0pt;"><strong>Mood Meter User Evaluation</strong></p> <p style="margin-left:-2.0pt;">&nbsp;</p> <p style="margin-left:-2.0pt;"><strong><em><u>Introductory section</u></em></strong>: You are invited to&nbsp;take part in a research study conducted by Steve Whittaker from the Department of Psychology at the University of California, Santa Cruz. Before you decide whether or not to participate in the study, you should read this form and ask questions if there is anything that you do not understand.</p> <p style="margin-left:-2.0pt;"><strong><em><u>Description of the project</u></em></strong>: The purpose of the study is to evaluate the usage of a &ldquo;mood meter&rdquo; which gauges the positive/negativity of writing as an application. New technologies have allowed computer systems to accurately assess people&rsquo;s emotions as they write. Using these technologies we have built a system that responds in real-time to the emotional content of a user&rsquo;s writing. Testing this system will allow us to better understand design considerations in this space.</p> <p style="margin-left:-2.0pt;"><strong><em><u>What you will do in the study</u></em></strong>: We have designed a system that measures and displays the positivity/negativity of your writing as you write. We will ask you to write 3 paragraphs about 3 different emotional events that you have experienced in the past week. As you do this, the system will respond with its predictions about your writing and display them to you. After you finish writing these 3 paragraphs we will ask you a number of questions about your experience with the system.</p> <p style="margin-left:-2.0pt;"><strong><em><u>Time required</u></em></strong><strong>:</strong> Participation will take approximately 15 minutes.</p> <p style="margin-left:-2.0pt;"><strong><em><u>Risks or discomfort</u></em></strong><strong><em>:</em></strong> Psychological discomfort is a risk when writing about experiences that may have strong emotions associated with them. If you feel high levels of discomfort at any point in the study you are free to end the study. If you choose to end the study early, you will not be penalized. Although we do not believe these are necessary, but if needed support resources are provided below.</p> <p style="margin-left:-2.0pt;">This study happens through the internet. To prevent the risk of accidental data disclosure, all communication between your computer and the web server will be encrypted. Your name or identifiable information will not be collected nor linked to your responses.</p> <p style="margin-left:-2.0pt;"><strong><em><u>Benefits of this study</u></em></strong><em>:</em> Although there will be no direct benefit to you for taking part in this study, however you will contribute to the science surrounding emotional journaling applications.&nbsp;</p> <p style="margin-left:-2.0pt;"><strong><em><u>Compensation</u></em></strong><em> (If applicable): </em>&nbsp;You will be paid 2.50 USD for participation in this study.</p> <p style="margin-left:-2.0pt;"><strong><em><u>Confidentiality</u></em></strong>: Any answers and writing that you make in this study will be kept private and secure. The anonymized results may be published in scientific reports or presented at scientific meetings.</p> <p style="margin-left:-2.0pt;">Identifying information will be collected in the form of your IP address and Amazon Turk ID. All pieces of identifying information collected will be stored securely on password protected computers. Your data will be reported in a way that does not identify you.</p> <p style="margin-left:-2.0pt;">We would ask your permission to keep your data for use in future research studies in a similar space.&nbsp; If you agree, we may report some of your data for future analyses. Once research is complete the data will be destroyed.</p> <p style="margin-left:-2.0pt;"><strong><em><u>Decision to quit at any time</u></em></strong><em>:</em> The decision to take part in this study is completely voluntary.&nbsp; You do not have to participate. Even if you decide at first to take part, you are free to change your mind at any time and quit the study. Whatever you decide will in no way be used against you. You will still receive full payment for the study.</p> <p style="margin-left:-2.0pt;"><strong><em><u>Rights and Complaints</u></em></strong>: If you have questions about this research, please contact Prof. Steve Whittaker, Principal Investigator, Address: 1156 High St. Santa Cruz, CA 95060, University of California Santa Cruz, Tel: (831) 459-2390. If you have any questions regarding your rights as a research participant,&nbsp; please contact the Office of Research Compliance Administration at the University of California at Santa Cruz at 831-459-1473 or orca@ucsc.edu.</p> <p style="margin-left:-2.0pt;">&nbsp;</p> <p style="margin-left:-2.0pt;"><strong><em><u>Signature</u></em></strong><em>:</em></p> <p style="margin-left:-2.0pt;">Signing this document (by accepting the check boxes below) means that you understand the information given to you in this form and that you voluntarily agree to participate in the research described above.</p> <div> <hr align="left" size="1" width="33%" /></div> </div> <div class="row" style="text-align: center;">&nbsp;</div> <div class="row" style="text-align: center;"> <p align="center"><strong>List of Mental Health and Crisis Hotlines</strong></p> <p>If you, or someone you know, is at risk of harm to themselves or others and needs immediate help<strong>.&nbsp;</strong><strong>DIAL 911</strong></p> <p>National Hopeline Network Suicide Prevention Hotline 1-800-SUICIDE&nbsp;<span style="text-align: center;">(1-800-784-2433)</span><br /> ​</p> <p><strong>Mental Health and Substance Abuse Services</strong></p> <p>Request for Services&nbsp;&nbsp; &nbsp;(800)-952-2335<br /> Mental Health Resource Center&nbsp;&nbsp; &nbsp;(831) 458-1923<br /> Psychiatric Emergencies - &nbsp;&nbsp;<span style="margin: 0px; padding: 0px; border: 0px; white-space: nowrap;">1‑877‑SAMHSA7</span>&nbsp;<span style="margin: 0px; padding: 0px; border: 0px; white-space: nowrap;">(1‑877‑726‑4727)</span><br /> &nbsp;</p> <p>&nbsp;</p> </div> <div class="row" style="text-align: center;"><label for="cbox2"><strong>​​</strong></label></div> <div class="row" id="workContent">' },
+      { type: "radiogroup", name: "consent", title: "I understand the information presented and I voluntarily agree to participate in the research described above and I give my permission for my data to be retained and used in future studies described above.", choices: ['Yes', 'No'], isRequired: false }
+]},
+      { name: "demographicsPage",questions: [
+      { type: "text", inputType: "number", name: "demo_age", title: "How old are you?", isRequired: false },
+      { type: "radiogroup", name: "demo_gender", title: "To which gender do you most identify?", choices: ['Female', 'Male', 'Transgender Female', 'Transgender Male', 'Non-binary', 'Other', 'Prefer Not to Answer'], isRequired: false }
+      ]},
+
+      { name: "screenerpage",questions: [
+            { type: "radiogroup", name: "screener1", title: "Have you bene bothered by nerviousness or your 'nerves' during the past month?", choices: ['Extremely so-to the point where I could not work or take care of things', 'Very much so', 'Quite a bit', 'Some-enough to bother me', 'A little', 'Not at all'], isRequired: true },
+            { type: "radiogroup", name: "screener2", title: "How much energy, pop, or vitality did you have or feel during the past month?", choices: ['Very full of energy-lots of pep', 'Fairly energetic most of the time', 'My energy level varied quite a bit', 'Generally low in energy or pep', 'Very low in energy or pep most of the time', 'No energy or pep at all-I felt drained, sapped'], isRequired: true },
+            { type: "radiogroup", name: "screener3", title: "I was emotionally stable and sure of myself during the past month", choices: ['None of the time', 'A little of the time', 'Some of the time', 'A good bit of the time', 'Most of the time', 'All of the time'], isRequired: true },
+            { type: "radiogroup", name: "screener4depress", title: "Did you feel depressed during the past month?", choices: ['No-never felt depressed at all', 'Yes-a little depressed now and then', 'Yes-quite depressed several times', 'Yes-very depressed almost every day', 'Yes-to the point that I did not care about anything', 'Yes-to the point where I felt like taking my own life'], isRequired: true },
+            { type: "radiogroup", name: "screener5", title: "I felt cheerful, lighthearted during the past month", choices: ['None of the time', 'A little of the time', 'Some of the time', 'A good bit of the time', 'Most of the time', 'All of the time'], isRequired: true },
+            { type: "radiogroup", name: "screener6", title: "I felt tired, worn out, used up, or exhausted during the past month", choices: ['None of the time', 'A little of the time', 'Some of the time', 'A good bit of the time', 'Most of the time', 'All of the time'], isRequired: true },
+          ] },
+    { name:"returnAdmin", questions: [{
+      type: "html",
+      name: "info", 
+      html: '<center><h3>Please ask the administrator to return to the room</h3><center>'
+    }]},
     { name:"page1", questions: [ 
       { type: "html", name: "experiences", title:"experience", html:'<div id="expquestion"><center><h5>Please write at least 100 words about an emotional experience that affected you in the last week.</h5></center><center><span id="wordcount">0/100 words</span></center><div id="text" contenteditable class="textarea form-control"></div></div>', isRequired: true }
                ]},
-      { name: "page2", questions: [
+      { name: "page2",questions: [
+              { type: "radiogroup", name: "numsLookedAtViz", title: "Select the number of times you looked at the visualization while you were writing:", choices: ['I never looked at the visualization', 'Once', '2-5 times', '5-10 times', '10+ times'], isRequired: true },
+              { type: "radiogroup", name: "vizLookEffectOnWriting", title: "If you selected more than once above: Rate the extent to which looking at the visualization impacted or did not impact your writing:", choices: ['Extreme Impact', 'Moderate Impact', 'Slight Impact', 'Had No Impact'], isRequired: false },
+            ]},
+      { name: "page3", questions: [
             { type: "matrix", name: "accuracies", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Strongly Negative"}, { value: 2, text: "Negative"}, { value: 3, text: "Slightly Negative"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Positive"}, { value: 6, text: "Positive"}, { value: 7, text: "Strongly Positive"}], rows: [{value: 'yourRating', text: "How positive or negative did you feel your writing was?"}, {value: 'eRating', text: "How positive or negative did the e-meter assess your writing to be?"}], isRequired: true },
             //to what extent do you trust the system and why (quant and qualitative)
        ] },
-        { name: "page3",questions: [
-            { type: "matrix", name: "assessedAccuracy", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], rows: [{value: 'eRating', text: "How accurate was the E-meter in its assessment of your writing?"}, {value: 'futureAccuracy', text: "If you were to use the system again how accurate do you think it would be?"}], isRequired: true },
+        { name: "page4",questions: [
+            { type: "matrix", name: "accuracy", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], rows: [{value: 'eRating', text: "How accurate or inaccurate was the E-meter in its assessment of your writing?"}, {value: 'futureAccuracy', text: "If you were to use the system again how accurate or inaccurate do you think it would be?"}], isRequired: true },
           ] },
 //make sure people can't look back on questions to frame current answers
-        { name: "page4",questions: [
-              { type: "comment", name: "accuracyReasons", title: "Please give 2 reasons for your evaluations of the E-meter's accuracy. Why did you think it was inaccurate or accurate?", isRequired: true }
-            ]},
-        { name: "page5",questions: [
-            { type: "matrix", name: "systemTrust", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Not at all"}, { value: 2, text: "Slightly"}, { value: 3, text: "Moderately"}, { value: 4, text: "Very"}, { value: 5, text: "Extremely"}, ], rows: [{value: 'trustRating', text: "How trustworthy did you find the E-meter system?"}], isRequired: true },
-              { type: "comment", name: "trustReasons", title: "Please explain why you chose your indicated level of trust.", isRequired: true }
+          { name: "page5",questions: [
+            { type: "radiogroup", name: "systemTrust", title: "How trustworthy or untrustworthy did you find the E-meter system?", choices: ['Very Untrustworthy', 'Untrustworthy', 'Slightly Untrustworthy', 'Neither Trustworthy Nor Untrustworthy', 'Slightly Trustworthy', 'Trustworthy', 'Very Trustworthy'], isRequired: true },
+            { type: "checkbox", name: "trustReasons", title: "Which of the following factors were most relevant to you in your rating of trust or distrust?", choices: ['How predictably the E-meter behaved', 'Potential biases of E-meter\'s creators', 'E-meter\'s accuracy or inaccuracy on the content I wrote', 'E-meter\'s accuracy or inaccuracy on predicting my current emotional state', 'Actions I took to test the E-meter\'s response', 'Understanding of how the E-meter worked', 'Amount of time that I have used the E-meter for'], isRequired: false }
           ] },
-        { name: "page6", questions: [
-              { type: "comment", name: "like", title: "Please name 2 or more things you liked about the system.", isRequired: true }, //up for grabs (reevaluate feedback from question) (what did this system do for you?) (did this change how you thought about yourself)
-              { type: "comment", name: "dislike", title: "Please name 2 or more things you disliked about the system.", isRequired: true }, // up for grabs (reevaluate feedback from question)
-            ]}, 
-        { name: "page7", questions: [
-              { type: "comment", name: "feedbackEffects", title: "Please give 2-3 ways the feedback from the algorithm affected your writing.", isRequired: true }, 
+          { name: "tetrisPage",questions: [
+            { type: "html", name: "info", html: '<center><h3>You will now spend 5 minutes playing tetris. Please click this <a target="_blank" href="http://htmltetris.com/">link</a> and the administrator will notify you when 5 minutes has passed.</h3><center>' },
+          ]},
+
+        { name: "page6",questions: [
+            { type: "radiogroup", name: "accuracy2", title: "How accurate or inaccurate did you find the E-meter system?", choices: ['Very Inaccurate', 'Inaccurate', 'Slightly Inaccurate', 'Neither Accurate Nor Inaccurate', 'Slightly Accurate', 'Accurate', 'Very Accurate'], isRequired: true },
+            { type: "radiogroup", name: "systemTrust2", title: "How trustworthy or untrustworthy did you find the E-meter system?", choices: ['Very Untrustworthy', 'Untrustworthy', 'Slightly Untrustworthy', 'Neither Trustworthy Nor Untrustworthy', 'Slightly Trustworthy', 'Trustworthy', 'Very Trustworthy'], isRequired: true },
           ] },
-            
-          { name: "page8", questions: [
-              { type: "comment", name: "tips", title: "Imagine that you were given personalized tips on how to improve you mood based on what you wrote. Would you make use of such suggestions?", isRequired: true },  //imagine you were given personalized tips to improve your mood 
-          ] },
-          { name: "page9", questions: [
-              { type: "comment", name: "folkTheory", title: "Please explain how do you think the system judges your writing.", isRequired: true }, 
-              { type: "comment", name: "testing", title: "Did you experiment with or manipulate your writing to test how the system was working or how accurate it was? If so, how?", isRequired: true }, //rephrase this (did you experiment/manipulate your writing to test how the system was working and how accurate it was. explain--
-        ] },
-          { name: "page10", questions: [
-              { type: "comment", name: "generalReactions", title: "If you have any additional feedback from your interaction with the E-meter, please detail it here.", isRequired: true }, //put on own page/get rid of.
-          ] },
-          { name: "page11", questions: [
-          //add debrief  (
-              { type: "html", name: "confirmationCode", html: "<h3>Confirmation Code: " + confirmationCode + "</h3><p>Please copy and paste this into the Mechanical Turk survey code field</p>"},
-          ] }
      ]
 };
 
@@ -64,11 +76,21 @@ function sendDataToServer(survey) {
 }
 
 survey.onCurrentPageChanged.add(function (sender, options) {
-  if (survey.currentPage.visibleIndex == 0) {
-    document.querySelector('#textAndMeter').style.display = '';
-    $('#expquestion').replaceWith(experienceNode);
-  } else {
-    document.querySelector('#textAndMeter').style.display = 'none';
+  if (survey.currentPage.visibleIndex == 4 ) {
+      document.querySelector('#textAndMeter').style.display = '';
+      experienceNode = $('#expquestion');
+  }
+  else if (survey.currentPage.visibleIndex == 10) {
+      console.log(survey.currentPage.visibleIndex);
+      document.querySelector('#textAndMeter').style.display = '';
+      $('#textAndMeter').append(experienceNode);
+      $('#text').on('keypress', function(e) {
+        e.preventDefault();
+      });
+  }
+  else {
+      console.log(survey.currentPage.visibleIndex);
+      document.querySelector('#textAndMeter').style.display = 'none';
   }
 });
 
@@ -143,7 +165,7 @@ function SetCaretPosition(el, pos){
 var lastWord = '',
     timerOn = false;
 document.body.onkeyup = function(e) {
-  if (survey.currentPage.visibleIndex == 0) {
+  if (survey.currentPage.visibleIndex == 4) {
     if (e.keyCode == 32 || e.keyCode == 8 || e.keyCode == 13) {
       var words = $('#text').text().split(/\s/);
       $('#wordcount').text(words.length + '/100 words');
@@ -180,6 +202,7 @@ document.body.onkeyup = function(e) {
 
 $(document).ready(function() {
   experienceNode = $('#expquestion');
+  document.querySelector('#textAndMeter').style.display = 'none';
   if(machineLearningCondition === 'transparent') {
     $('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the question below. Individual words you type will be highlighted according to whether they contribute towards a positive mood direction or negative mood direction.');
   } else {
