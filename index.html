@@ -13,6 +13,7 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link rel="stylesheet" href="css/c3.min.css">
+    <link rel="stylesheet" href="css/survey.css">
     <link rel="stylesheet" href="css/emeter.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -28,12 +29,16 @@
         <div class="col-md-8 col-md-offset-2">
           <center><h1>E-meter Evaluation</h1></center>
           <center><h1 id="nomobile" style="display: none">Please complete this survey using a laptop or desktop computer.</h1></center>
-          <div id="textAndMeter">
+          <div id="textAndMeter" class="row" style="display: none">
             <div id="emeter">
             </div>
-          <center><h5 id="explanation"></h5></center>
           </div>
-          <div id="surveyContainer">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <h5 id="explanation" style="display: none"></h5>
+          <div id="surveyContainer" class="row">
           </div>
         </div>
       </div>
@@ -44,7 +49,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
-    <script src="js/survey.bootstrap.min.js"></script>
+    <script src="js/survey.ko.js"></script>
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="js/c3.min.js"></script>
     <script src="js/stemmer.js"></script>

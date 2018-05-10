@@ -9,3 +9,12 @@
     padding: 2px;
     resize: both;
 }
+
+.tlx b, .tlx div {
+padding-top: 2em;
+}
+
+div.tlx {
+padding-bottom: 3em;
+}
+
