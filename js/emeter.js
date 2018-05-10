@@ -1,52 +1,277 @@
-var confirmationCode = Math.floor(Math.random() * 1000000),
-machineLearningCondition = Math.floor(Math.random() * 2) ? 'transparent' : 'control',
-experienceNode = null;
+var confirmationCode = 'easy' + Math.floor(Math.random() * 1000000),
+  machineLearningCondition = Math.floor(Math.random() * 2) ? 'transparent' : 'control',
+  legend = '<div class="col-md-3"><h3>Legend:</h3><br><span style="background-color:rgba(255, 0, 0, 0.5);">Very Negative</span><br><span style="background-color:rgba(249, 118, 0, 0.5);">Negative</span><br><span style="background-color:rgba(246, 198, 0, 0.5);">Slightly Negative</span><br><span style="background-color:rgba(96, 176, 68, 0.5);">Positive</span><br><span style="background-color:rgba(61, 110, 43, 0.5);">Very Positive</span><br><span>Unimportant</span></div>'
+  experienceNode = null;
 var began = new Date();
+var tlxDescriptions = {
+	'Mental Demand': 'How much mental and perceptual activity was required (e.g. thinking, deciding, calculating, remembering, looking, searching, etc)? Was the task easy or demanding, simple or complex, exacting or forgiving?', 
+	'Performance': 'How successful do you think you were in accomplishing the goals of the task set by the experimenter (or yourself)? How satisfied were you with your performance in accomplishing these goals?',
+	'Physical Demand': 'How much physical activity was required (e.g. pushing, pulling, turning, controlling, activating, etc)? Was the task easy or demanding, slow or brisk, slack or strenuous, restful or laborious?',
+	'Temporal Demand': 'How much time pressure did you feel due to the rate of pace at which the tasks or task elements occurred? Was the pace slow and leisurely or rapid and frantic?',
+	'Frustration': 'How insecure, discouraged, irritated, stressed and annoyed versus secure, gratified, content, relaxed and complacent did you feel during the task?',
+	'Effort': 'How hard did you have to work (mentally and physically) to accomplish your level of performance?',
+	'Click this option to show you are actually performing the task': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean laoreet nisi a lacus porta fringilla. Mauris luctus eu leo in laoreet. Donec scelerisque finibus scelerisque. Vestibulum iaculis justo non erat tristique ultrices.',
+	'Do NOT click this option to show you are actually performing the task': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean laoreet nisi a lacus porta fringilla. Mauris luctus eu leo in laoreet. Donec scelerisque finibus scelerisque. Vestibulum iaculis justo non erat tristique ultrices.'
+};
+var emeterHTMLS = {};
+var emeterValues = {'emeter1': 66.66, 'emeter2': 66.66};
+
+
 var surveyJSON = { title: "", 
-  surveyPostId: '516ed990-1ffe-4157-9f38-4ebabda5fe33',
+  surveyPostId: 'c2855f11-5cca-4d2a-914f-abbe8dcd20d0',
   showProgressBar: 'bottom',
   pages: [
-    { name:"page1", questions: [ 
-      { type: "html", name: "experiences", title:"experience", html:'<div id="expquestion"><center><h5>Please write at least 100 words about an emotional experience that affected you in the last week.</h5></center><center><span id="wordcount">0/100 words</span></center><div id="text" contenteditable class="textarea form-control"></div></div>', isRequired: true }
-               ]},
-      { name: "page2", questions: [
-            { type: "matrix", name: "accuracies", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Strongly Negative"}, { value: 2, text: "Negative"}, { value: 3, text: "Slightly Negative"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Positive"}, { value: 6, text: "Positive"}, { value: 7, text: "Strongly Positive"}], rows: [{value: 'yourRating', text: "How positive or negative did you feel your writing was?"}, {value: 'eRating', text: "How positive or negative did the e-meter assess your writing to be?"}], isRequired: true },
-            //to what extent do you trust the system and why (quant and qualitative)
-       ] },
-        { name: "page3",questions: [
-            { type: "matrix", name: "assessedAccuracy", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], rows: [{value: 'currentAccuracy', text: "How accurate was the E-meter in its assessment of your writing?"}, {value: 'futureAccuracy', text: "If you were to use the system again how accurate do you think it would be?"}], isRequired: true },
-          ] },
-//make sure people can't look back on questions to frame current answers
-        { name: "page4",questions: [
-              { type: "comment", name: "accuracyReasons", title: "Please give 2 reasons for your evaluations of the E-meter's accuracy. Why did you think it was inaccurate or accurate?", isRequired: true }
-            ]},
-        { name: "page5",questions: [
-            { type: "matrix", name: "systemTrust", title: "Please choose the answer that best reflects your thinking.", columns: [{ value: 1, text: "Not at all"}, { value: 2, text: "Slightly"}, { value: 3, text: "Moderately"}, { value: 4, text: "Very"}, { value: 5, text: "Extremely"}, ], rows: [{value: 'trustRating', text: "How trustworthy did you find the E-meter system?"}], isRequired: true },
-              { type: "comment", name: "trustReasons", title: "Please explain why you chose your indicated level of trust.", isRequired: true }
-          ] },
-        { name: "page6", questions: [
-              { type: "comment", name: "like", title: "Please name 2 or more things you liked about the system.", isRequired: true }, //up for grabs (reevaluate feedback from question) (what did this system do for you?) (did this change how you thought about yourself)
-              { type: "comment", name: "dislike", title: "Please name 2 or more things you disliked about the system.", isRequired: true }, // up for grabs (reevaluate feedback from question)
-            ]}, 
-        { name: "page7", questions: [
-              { type: "comment", name: "feedbackEffects", title: "Please give 2-3 ways the feedback from the algorithm affected your writing.", isRequired: true }, 
-          ] },
-            
-          { name: "page8", questions: [
-              { type: "comment", name: "tips", title: "Imagine that you were given personalized tips on how to improve you mood based on what you wrote. Would you make use of such suggestions?", isRequired: true },  //imagine you were given personalized tips to improve your mood 
-          ] },
-          { name: "page9", questions: [
-              { type: "comment", name: "folkTheory", title: "Please explain how do you think the system judges your writing.", isRequired: true }, 
-              { type: "comment", name: "testing", title: "Did you experiment with or manipulate your writing to test how the system was working or how accurate it was? If so, how?", isRequired: true }, //rephrase this (did you experiment/manipulate your writing to test how the system was working and how accurate it was. explain--
-        ] },
-          { name: "page10", questions: [
-              { type: "comment", name: "generalReactions", title: "If you have any additional feedback from your interaction with the E-meter, please detail it here.", isRequired: true }, //put on own page/get rid of.
-          ] },
-          { name: "page11", questions: [
-          //add debrief  (
-              { type: "html", name: "confirmationCode", html: "<h3>Confirmation Code: " + confirmationCode + "</h3><p>Please copy and paste this into the Mechanical Turk survey code field</p>"},
-          ] }
-     ]
+    { name:"preQuestions", 
+      questionsOrder: 'random', 
+      questions: [
+        {
+          type: "radiogroup",
+          name: "presurveynormal",
+          title: "This program evaluates the positivity/negativity of emotional experiences that users write about. How accurate or inaccurate do you think this program would be for you? The program works with English also.",
+          colCount: 7,
+          choices: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], rows: [{value: 'preaccuracycontrol', text: "How accurate or inaccurate was the E-meter in its assessment of your writing?"}, {value: 'futureAccuracy', text: "If you were to use the system again how accurate or inaccurate do you think it would be?"}], isRequired: true 
+        },
+        {
+          type: "radiogroup",
+          name: "presurveytransparent",
+          title: "This program evaluates the positivity/negativity of emotional experiences that users write about. How accurate or inaccurate do you think this program would be for you? The program works with English also.",
+          colCount: 7,
+          choices: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], rows: [{value: 'preaccuracytransparent', text: "How accurate or inaccurate was the E-meter in its assessment of your writing?"}, {value: 'futureAccuracy', text: "If you were to use the system again how accurate or inaccurate do you think it would be?"}], isRequired: true 
+        },
+      ]},
+    { name:"preQuestionsReasons",
+      questions: [
+        {
+          type: "comment",
+          name: "presurveyaccuracyreasons",
+          title: "Please give 2 or more reasons for the accuracy ratings you made on the previous page.",
+          isRequired: true
+        }
+      ]},
+
+    { name:"emeter1", questions: [ 
+      { type: "html", name: "experiences1", title:"experience1", html:'<div id="expquestion"><center><h5>Please write at least 100 words about an emotional experience that affected you in the last week.</h5></center><center><span id="wordcount">0/100 words</span></center><div id="text" contenteditable class="textarea form-control"></div></div>', isRequired: true }
+    ]},
+    /*{ name:"tlxpage", 
+      questionsOrder: 'random', 
+      questions: [
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons1",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Temporal Demand', 'Effort']
+        },
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons2",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Temporal Demand', 'Mental Demand']
+        },
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons3",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrders: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Temporal Demand', 'Physical Demand']
+        },
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons4",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Temporal Demand', 'Performance']
+        },
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons5",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Temporal Demand', 'Frustration']
+        },
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons6",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Mental Demand', 'Effort']
+        },
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons7",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Frustration', 'Mental Demand']
+        },
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons8",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Frustration', 'Physical Demand']
+        },
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons9",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Frustration', 'Performance']
+        },
+        {
+            type: "radiogroup",
+            name: "attentionCheck",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Click this option to show you are actually performing the task', 'Do NOT click this option to show you are actually performing the task']
+        },
+
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons10",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Frustration', 'Effort']
+        },
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons11",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Effort', 'Performance']
+        },
+        {
+            type: "radiogroup",
+            name: "tlxcomparisons12",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Physical Demand', 'Effort']
+        },
+{
+            type: "radiogroup",
+            name: "tlxcomparisons13",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Mental Demand', 'Performance']
+        },
+
+{
+            type: "radiogroup",
+            name: "tlxcomparisons14",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Mental Demand', 'Physical Demand']
+        },
+
+{
+            type: "radiogroup",
+            name: "tlxcomparisons15",
+            title: "Click on the factor that represents the more important contributor to workload for the task",
+            colCount: 1,
+            choicesOrder: 'random',
+            commentText: 'what is this where does it go',
+            choices: ['Physical Demand', 'Performance']
+        },
+
+      ]},*/
+
+    { name:"tlxsliders1", questions: [ 
+      {
+        type: "html",
+        name: "tlxsliders1",
+        title: "How satisfied are you with the Product?",
+        html:'<div class="row"><center><h3>Click on each scale at the point that best indicates your experience of the task</h3></center><h4 class="col-md-2 col-md-offset-3"><center>Mental Demand</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="mentalDemand"></div><b class="col-md-1">High</b><p class="col-md-5">How much mental and perceptual activity was required (e.g. thinking, deciding, calculating, remembering, looking, searching, etc)? Was the task easy or demanding, simple or complex, exacting or forgiving?</p></div><div class="row"><h4 class="col-md-2 col-md-offset-3"><center>Physical Demand</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="physicalDemand"></div><b class="col-md-1">High</b><p class="col-md-5">How much physical activity was required (e.g. pushing, pulling, turning, controlling, activating, etc)? Was the task easy or demanding, slow or brisk, slack or strenuous, restful or laborious?</p></div><div class="row"><h4 class="col-md-2 col-md-offset-3"><center>Temporal Demand</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="temporalDemand"></div><b class="col-md-1">High</b><p class="col-md-5">How much time pressure did you feel due to the rate of pace at which the tasks or task elements occurred? Was the pace slow and leisurely or rapid and frantic?</p></div><div class="row"><h4 class="col-md-2 col-md-offset-3"><center>Performance</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="performance"></div><b class="col-md-1">High</b><p class="col-md-5">How successful do you think you were in accomplishing the goals of the task set by the experimenter (or yourself)? How satisfied were you with your performance in accomplishing these goals?</p></div><div class="row"><h4 class="col-md-2 col-md-offset-3"><center>Effort</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="effort"></div><b class="col-md-1">High</b><p class="col-md-5">How hard did you have to work (mentally and physically) to accomplish your level of performance?</p></div><div class="row"><h4 class="col-md-2 col-md-offset-3"><center>Frustration</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="frustration"></div><b class="col-md-1">High</b><p class="col-md-5">How insecure, discouraged, irritated, stressed and annoyed versus secure, gratified, content, relaxed and complacent did you feel during the task?</p></div>'
+        }
+      ]},
+
+    { name: "page1", questions: [
+      { type: "radiogroup", name: "userAssessmentOfWriting1", title: "How positive or negative did you feel your writing was?", choices: [{ value: 1, text: "Strongly Negative"}, { value: 2, text: "Negative"}, { value: 3, text: "Slightly Negative"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Positive"}, { value: 6, text: "Positive"}, { value: 7, text: "Strongly Positive"}]},
+      { type: "radiogroup", name: "userAssessmentofEmeterRating1", title: "How positive or negative did the e-meter assess your writing to be?", choices: [{ value: 1, text: "Strongly Negative"}, { value: 2, text: "Negative"}, { value: 3, text: "Slightly Negative"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Positive"}, { value: 6, text: "Positive"}, { value: 7, text: "Strongly Positive"}]},
+      //to what extent do you trust the system and why (quant and qualitative)
+    ] },
+    { name: "page2",questions: [
+      { type: "radiogroup", name: "accuracy1", title: "How accurate or inaccurate was the E-meter in its assessment of your writing?", choices: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}] },
+    ]},
+    { name: "trust1",questions: [
+      { type: "radiogroup", name: "systemTrust1", title: "How trustworthy or untrustworthy did you find the E-meter system?", choices: [{value: 1, text: 'Very Untrustworthy'}, {value: 2, text: 'Untrustworthy'}, {value: 3, text: 'Slightly Untrustworthy'}, {value: 4, text:'Neither Trustworthy Nor Untrustworthy'}, {value: 5, text: 'Slightly Trustworthy'}, {value: 6, text: 'Trustworthy'}, {value: 7, text: 'Very Trustworthy'}], isRequired: true },
+      { type: "checkbox", name: "trustReasons1", title: "Which of the following factors were most relevant to you in your rating of trust or distrust?", choices: [{value: 1, text: 'How predictably the E-meter behaved'}, {value: 2, text: 'Potential biases of E-meter\'s creators'}, {value: 3, text: 'E-meter\'s accuracy or inaccuracy on the content I wrote'}, {value: 4, text: 'E-meter\'s accuracy or inaccuracy on predicting my current emotional state'}, {value: 5, text: 'Actions I took to test the E-meter\'s response'}, {value: 6, text: 'Understanding of how the E-meter worked'}, {value: 7, text: 'Amount of time that I have used the E-meter for'}], isRequired: false }
+    ] },
+    { name: "panas",
+      questionsOrder: 'random', 
+      questions: [
+        { type: "matrix", name: "panas", title: "This scale consists of a number of words that describe different feelings and emotions. Read each item and then mark the appropriate answer. Indicate to what extent you have felt this way during the past few weeks. Use the following questions to record your answers", columns: [{ value: 1, text: "Very Slightly or Not At All"}, { value: 2, text: "A Little"}, { value: 3, text: "Moderately"}, { value: 4, text: "Quite A Bit"}, { value: 5, text: "Extremely"}], rows: [{value: 'panas_interested', text: "Interested"}, {value: 'panas_distressed', text: "Distressed"}, {value: 'panas_excited', text: "Excited"}, {value: 'panas_upset', text: "Upset"},{value: 'panas_strong', text: "Strong"}, {value: 'panas_guilty', text: "Guilty"},{value: 'panas_scared', text: "Scared"}, {value: 'panas_hostile', text: "Hostile"},{value: 'panas_enthusiastic', text: "Enthusiastic"}, {value: 'panas_proud', text: "Proud"},{value: 'panas_irritable', text: "Irritable"}, {value: 'panas_alert', text: "Alert"},{value: 'panas_ashamed', text: "Ashamed"}, {value: 'panas_inspired', text: "Inspired"},{value: 'panas_nervous', text: "Nervous"}, {value: 'panas_determined', text: "Determined"},{value: 'panas_attentive', text: "Attentive"}, {value: 'panas_jittery', text: "Jittery"},{value: 'panas_active', text: "Active"}, {value: 'panas_afraid', text: "Afraid"},],  },
+      ]},
+
+    { name:"emeter2", questions: [ 
+      { type: "html", name: "experiences2", title:"experience2", html:'<div id="expquestion"><center><h5>Please write at least 100 words about an emotional experience that affected you in the last week.</h5></center><center><span id="wordcount">0/100 words</span></center><div id="text" contenteditable class="textarea form-control"></div></div>', isRequired: true }
+    ]},
+    { name:"tlxsliders2", questions: [ 
+      {
+        type: "html",
+        name: "tlxsliders2",
+        title: "How satisfied are you with the Product?",
+        html:'<div class="row"><h4 class="col-md-2 col-md-offset-3"><center>Mental Demand</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="mentalDemand"></div><b class="col-md-1">High</b><p class="col-md-5">How much mental and perceptual activity was required (e.g. thinking, deciding, calculating, remembering, looking, searching, etc)? Was the task easy or demanding, simple or complex, exacting or forgiving?</p></div><div class="row"><h4 class="col-md-2 col-md-offset-3"><center>Physical Demand</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="physicalDemand"></div><b class="col-md-1">High</b><p class="col-md-5">How much physical activity was required (e.g. pushing, pulling, turning, controlling, activating, etc)? Was the task easy or demanding, slow or brisk, slack or strenuous, restful or laborious?</p></div><div class="row"><h4 class="col-md-2 col-md-offset-3"><center>Temporal Demand</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="temporalDemand"></div><b class="col-md-1">High</b><p class="col-md-5">How much time pressure did you feel due to the rate of pace at which the tasks or task elements occurred? Was the pace slow and leisurely or rapid and frantic?</p></div><div class="row"><h4 class="col-md-2 col-md-offset-3"><center>Performance</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="performance"></div><b class="col-md-1">High</b><p class="col-md-5">How successful do you think you were in accomplishing the goals of the task set by the experimenter (or yourself)? How satisfied were you with your performance in accomplishing these goals?</p></div><div class="row"><h4 class="col-md-2 col-md-offset-3"><center>Effort</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="effort"></div><b class="col-md-1">High</b><p class="col-md-5">How hard did you have to work (mentally and physically) to accomplish your level of performance?</p></div><div class="row"><h4 class="col-md-2 col-md-offset-3"><center>Frustration</center></h4></div><div class="row tlx"><b align="right" class="col-md-1">Low</b><div class="col-md-5"><input type="range" min="0" max="100" step="5" value="50" class="slider" id="frustration"></div><b class="col-md-1">High</b><p class="col-md-5">How insecure, discouraged, irritated, stressed and annoyed versus secure, gratified, content, relaxed and complacent did you feel during the task?</p></div>'
+      }
+    ]},
+
+    { name: "page5", questions: [
+        { type: "radiogroup", name: "userAssessmentOfWriting2", title: "How positive or negative did you feel your writing was?", choices: [{ value: 1, text: "Strongly Negative"}, { value: 2, text: "Negative"}, { value: 3, text: "Slightly Negative"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Positive"}, { value: 6, text: "Positive"}, { value: 7, text: "Strongly Positive"}]},
+      { type: "radiogroup", name: "userAssessmentofEmeterRating2", title: "How positive or negative did the e-meter assess your writing to be?", choices: [{ value: 1, text: "Strongly Negative"}, { value: 2, text: "Negative"}, { value: 3, text: "Slightly Negative"}, { value: 4, text: "Neutral"}, { value: 5, text: "Slightly Positive"}, { value: 6, text: "Positive"}, { value: 7, text: "Strongly Positive"}]},
+      //to what extent do you trust the system and why (quant and qualitative)
+    ] },
+    { name: "page6",questions: [
+     { type: "radiogroup", name: "accuracy2", title: "How accurate or inaccurate was the E-meter in its assessment of your writing?", choices: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}] },
+    ] },
+    //make sure people can't look back on questions to frame current answers
+    { name: "page7",questions: [
+      { type: "radiogroup", name: "systemTrust2", title: "How trustworthy or untrustworthy did you find the E-meter system?", choices: [{value: 1, text: 'Very Untrustworthy'}, {value: 2, text: 'Untrustworthy'}, {value: 3, text: 'Slightly Untrustworthy'}, {value: 4, text:'Neither Trustworthy Nor Untrustworthy'}, {value: 5, text: 'Slightly Trustworthy'}, {value: 6, text: 'Trustworthy'}, {value: 7, text: 'Very Trustworthy'}], isRequired: true },
+      { type: "checkbox", name: "trustReasons2", title: "Which of the following factors were most relevant to you in your rating of trust or distrust?", choices: [{value: 1, text: 'How predictably the E-meter behaved'}, {value: 2, text: 'Potential biases of E-meter\'s creators'}, {value: 3, text: 'E-meter\'s accuracy or inaccuracy on the content I wrote'}, {value: 4, text: 'E-meter\'s accuracy or inaccuracy on predicting my current emotional state'}, {value: 5, text: 'Actions I took to test the E-meter\'s response'}, {value: 6, text: 'Understanding of how the E-meter worked'}, {value: 7, text: 'Amount of time that I have used the E-meter for'}], isRequired: false }
+    ] },
+    { name: "chooseSystem",questions: [
+      { type: "radiogroup", name: "finalVersionChoice", title: "If you were to use the E-meter again, which system would you prefer?", choices: ['Transparent', 'Normal'], isRequired: true },
+      {
+        type: "comment",
+        name: "finalVersionChoiceReasons",
+        title: "Please give 2 or more reasons for the choice you made above.",
+        isRequired: true
+      }
+    ]},
+    { name: "page11", questions: [
+      //add debrief  (
+      { type: "html", name: "confirmationCode", html: "<h3>Confirmation Code: " + confirmationCode + "</h3><p>Please copy and paste this into the Mechanical Turk survey code field</p>"},
+    ] }
+
+  ]
 };
 
 var survey = new Survey.Survey(surveyJSON, "surveyContainer");
@@ -55,29 +280,92 @@ survey.sendResultOnPageNext = true;
 survey.clientId = Math.random();
 survey.onComplete.add(sendDataToServer);
 survey.setValue('confirmationCode', confirmationCode)
-survey.setValue('transparency', machineLearningCondition)
-survey.setValue('writtenText', '')
+survey.setValue('startingCondition', machineLearningCondition)
 
 function sendDataToServer(survey) {
   survey.setValue('timeElapsed', new Date() - began);
   //You should get the Guid for storing survey data in dxSurvey.com
-  survey.sendResult('70ad9ad7-5266-48af-a28a-05b978363cf6');
+  survey.sendResult('c2855f11-5cca-4d2a-914f-abbe8dcd20d0');
 }
 
-survey.onCurrentPageChanged.add(function (sender, options) {
-  if (survey.currentPage.visibleIndex == 0) {
-    document.querySelector('#textAndMeter').style.display = '';
-    $('#expquestion').replaceWith(experienceNode);
-  } else {
-    document.querySelector('#textAndMeter').style.display = 'none';
-  }
+function toggleMeterAndExplanation() {
+	$('#textAndMeter').toggle();
+	$('#explanation').toggle();
+}
+function hideEmeter() {
+	$('#textAndMeter').hide();
+	$('#explanation').hide();
+}
+
+survey.onAfterRenderPage.add(function (sender, options) {
+	if (survey.currentPage.name == 'emeter1') {
+		chart.load({
+			columns: [['Rating', emeterValues[survey.currentPage.name]]]
+		});
+		if (emeterHTMLS[survey.currentPage.name] != true) {
+				$('#text').html(emeterHTMLS[survey.currentPage.name]);
+		}
+		if (machineLearningCondition == 'control') {
+			$('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the prompt below.');
+		} else {
+			$('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the prompt below. Individual words you type will be highlighted according to whether they contribute towards a positive direction or negative direction.');
+			$('#expquestion').after(legend);
+			$('#expquestion').addClass("col-md-8");
+		}
+		toggleMeterAndExplanation();
+		experienceNode = $('#expquestion');
+	} else if (survey.currentPage.name == 'chooseSystem') {
+		$('input[name^="finalVersionChoice"][value="Transparent"]').siblings('span:Contains("Transparent")').replaceWith('<center><img src="img/controlgif.gif" style="padding-bottom: 4em;"></img></center>');
+		$('input[name^="finalVersionChoice"][value="Normal"]').siblings('span:Contains("Normal")').replaceWith('<center><img src="img/transparentgif.gif" style="padding-bottom: 4em;"></img></center>');
+	} else if (survey.currentPage.name == 'preQuestions') {
+		$('input[name^="presurveynormal"]').parents('.sv_q').before('<center><img src="img/controlgif.gif"></img></center>');
+		$('input[name^="presurveytransparent"]').parents('.sv_q').before('<center><img src="img/transparentgif.gif"></img></center>');
+
+	} else if (survey.currentPage.name == 'tlxpage') {
+		for (var key in tlxDescriptions) {
+			$('input[type="radio"][value="' + key + '"]').parent().after('<div class="col-md-6"><p>' + tlxDescriptions[key] + '</p></div>').addClass("col-md-2 pull-left").parent().parent().attr('style', 'padding-bottom: 5em;');
+		}
+	} else if (survey.currentPage.name == 'tlxsliders1' || survey.currentPage.name == 'tlxsliders2') {
+			hideEmeter();
+			$('input[type="range"]').each(function () {
+				if (survey.getValue(survey.currentPage.name + '_' + $(this).attr('id')) != null) {
+					$(this).val(survey.getValue(survey.currentPage.name + '_' + $(this).attr('id')));
+				}
+			});
+			$('input[type="range"]').on('input', function () {
+				console.log($(this).attr('id'));
+				console.log($(this).val());
+				survey.setValue(survey.currentPage.name + '_' + $(this).attr('id'), $(this).val());
+			});
+	} else if (survey.currentPage.name == 'emeter2') {
+		chart.load({
+			columns: [['Rating', emeterValues[survey.currentPage.name]]]
+		});
+		if (emeterHTMLS[survey.currentPage.name] != true) {
+			$('#text').html(emeterHTMLS[survey.currentPage.name]);
+		}
+		if (machineLearningCondition == 'transparent') {
+			$('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the prompt below.');
+		} else {
+			$('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the prompt below. Individual words you type will be highlighted according to whether they contribute towards a positive mood direction or negative mood direction.');
+			$('#expquestion').after(legend);
+			$('#expquestion').addClass("col-md-8");
+		}
+		toggleMeterAndExplanation();
+		experienceNode = $('#expquestion');
+	}
+	else {
+		console.log(survey.currentPage.visibleIndex);
+		$('#textAndMeter').hide();
+		$('#explanation').hide();
+	}
 });
 
 var chart = c3.generate({
     bindto: "#emeter",
     data: {
         columns: [
-            ['Positivity', 63.333]
+            ['Rating', 63.333]
         ],
         type: 'gauge',
     },
@@ -144,49 +432,52 @@ function SetCaretPosition(el, pos){
 var lastWord = '',
     timerOn = false;
 document.body.onkeyup = function(e) {
-  if (survey.currentPage.visibleIndex == 0) {
-    if (e.keyCode == 32 || e.keyCode == 8 || e.keyCode == 13) {
-      var words = $('#text').text().split(/\s/);
-      $('#wordcount').text(words.length + '/100 words');
-      //Interested in algorithm UX? Shoot me an email alspring(at)ucsc(dot)edu
-        var written_text = $('#text').text(),
-
-        newVal = predict_all(written_text),
-        pos = $('#text').caret('pos'),
-        word_colors = make_words_colors_dict(written_text);
-        survey.setValue('writtenText', written_text);
-        if (machineLearningCondition === 'transparent') {
-          for (var key in word_colors) {
-            written_text = written_text.replace(new RegExp('\\b' + key + '\\b', 'gi'),
-              function (match) {
-                return '<span style="background-color: ' + word_colors[key] + ';">' + match + '</span>';
-            });
-          }
-          $('#text').html(written_text);
-          $('#text').caret('pos', pos);
+  if (e.keyCode == 32 || e.keyCode == 8 || e.keyCode == 13) {
+    var words = $('#text').text().split(/\s/);
+    $('#wordcount').text(words.length + '/100 words');
+    //Interested in algorithm UX? Shoot me an email alspring(at)ucsc(dot)edu
+      var written_text = $('#text').text(),
+      newVal = predict_all(written_text),
+      pos = $('#text').caret('pos'),
+      word_colors = make_words_colors_dict(written_text);
+			emeterHTMLS[survey.currentPage.name] = written_text;
+			emeterValues[survey.currentPage.name] = newVal;
+      if ((machineLearningCondition === 'transparent' && survey.currentPage.name == 'emeter1') || (machineLearningCondition === 'control' && survey.currentPage.name == 'emeter2')) {
+        for (var key in word_colors) {
+          written_text = written_text.replace(new RegExp('\\b' + key + '\\b', 'gi'),
+            function (match) {
+              return '<span style="background-color: ' + word_colors[key] + ';">' + match + '</span>';
+          });
         }
-        //restore();
-        /*if (newVal > 100) {
-          newVal = 100;
-        } else if (newVal < 0) {
-          newVal = 0;
-        }*/
-        experienceNode = $('#expquestion');
-        survey.setValue('finalEmeterValue', newVal);
-        chart.load({
-              columns: [['Positivity', newVal]]
-        });
-      //}
-   }
+        $('#text').html(written_text);
+				emeterHTMLS[survey.currentPage.name] = written_text
+        $('#text').caret('pos', pos);
+      }
+      //restore();
+      /*if (newVal > 100) {
+        newVal = 100;
+      } else if (newVal < 0) {
+        newVal = 0;
+      }*/
+      experienceNode = $('#expquestion');
+      survey.setValue('emeterValue' + machineLearningCondition , newVal);
+      chart.load({
+            columns: [['Rating', newVal]]
+      });
+    //}
   }
 }
 
 $(document).ready(function() {
   experienceNode = $('#expquestion');
-  if(machineLearningCondition === 'transparent') {
-    $('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the question below. Individual words you type will be highlighted according to whether they contribute towards a positive mood direction or negative mood direction.');
+	$('input[name^="presurveynormal"]').parents('.sv_q').before('<center><img src="img/controlgif.gif"></img></center>');
+	$('input[name^="presurveytransparent"]').parents('.sv_q').before('<center><img src="img/transparentgif.gif"></img></center>');
+	if(machineLearningCondition === 'transparent') {
+    $('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the prompt below. Individual words you type will be highlighted according to whether they contribute towards a positive mood direction or negative mood direction.');
+    $('#expquestion').after(legend);
+    $('#expquestion').addClass("col-md-8");
   } else {
-    $('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the question below.');
+    $('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the prompt below.');
   }
   /*$('#btn-explain').click(function (e) {
     $('#explanation').append('blahblahtext');
