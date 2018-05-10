@@ -315,8 +315,8 @@ survey.onAfterRenderPage.add(function (sender, options) {
 		toggleMeterAndExplanation();
 		experienceNode = $('#expquestion');
 	} else if (survey.currentPage.name == 'chooseSystem') {
-		$('input[name^="finalVersionChoice"][value="Transparent"]').siblings('span:Contains("Transparent")').replaceWith('<center><img src="img/controlgif.gif" style="padding-bottom: 4em;"></img></center>');
-		$('input[name^="finalVersionChoice"][value="Normal"]').siblings('span:Contains("Normal")').replaceWith('<center><img src="img/transparentgif.gif" style="padding-bottom: 4em;"></img></center>');
+		$('input[name^="finalVersionChoice"][value="Transparent"]').siblings('span:Contains("Transparent")').replaceWith('<center><img src="img/transparentgif.gif" style="padding-bottom: 4em;"></img></center>');
+		$('input[name^="finalVersionChoice"][value="Normal"]').siblings('span:Contains("Normal")').replaceWith('<center><img src="img/controlgif.gif" style="padding-bottom: 4em;"></img></center>');
 	} else if (survey.currentPage.name == 'preQuestions') {
 		$('input[name^="presurveynormal"]').parents('.sv_q').before('<center><img src="img/controlgif.gif"></img></center>');
 		$('input[name^="presurveytransparent"]').parents('.sv_q').before('<center><img src="img/transparentgif.gif"></img></center>');
