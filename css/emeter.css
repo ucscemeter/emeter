@@ -18,3 +18,8 @@ div.tlx {
 padding-bottom: 3em;
 }
 
+#text {
+  white-space: pre-wrap;
+  word-wrap: normal;
+  overflow-x: scroll;
+}
