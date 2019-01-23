@@ -9,7 +9,7 @@ var emeterValues = {'emeter1': 66.66, 'emeter2': 66.66};
 
 
 var surveyJSON = { title: "", 
-  surveyPostId: '',
+  surveyPostId: '9fc1d2e5-62ae-4b24-b1f5-386d544c0e45',
   showProgressBar: 'bottom',
   pages: [
     { name: "page99", questions: [
@@ -153,7 +153,7 @@ survey.setValue('startingCondition', machineLearningCondition)
 function sendDataToServer(survey) {
   survey.setValue('timeElapsed', new Date() - began);
   //You should get the Guid for storing survey data in dxSurvey.com
-  survey.sendResult('c2855f11-5cca-4d2a-914f-abbe8dcd20d0');
+  survey.sendResult('9fc1d2e5-62ae-4b24-b1f5-386d544c0e45');
 }
 
 function toggleMeterAndExplanation() {
@@ -161,9 +161,11 @@ function toggleMeterAndExplanation() {
 	$('#explanation').toggle();
   $('#why_button').toggle();
 }
+
 function hideEmeter() {
 	$('#textAndMeter').hide();
 	$('#explanation').hide();
+  $('#why_button').hide();
 }
 
 survey.onAfterRenderPage.add(function (sender, options) {
@@ -204,12 +206,10 @@ survey.onAfterRenderPage.add(function (sender, options) {
 			$('#expquestion').after(legend);
 			$('#expquestion').addClass("col-md-8");
 		}
-		toggleMeterAndExplanation();
 		experienceNode = $('#expquestion');
 	}
 	else {
-		$('#textAndMeter').hide();
-		$('#explanation').hide();
+		hideEmeter();
 	}
 });
 
