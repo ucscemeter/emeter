@@ -1,3 +1,7 @@
+var colors_vals = ['rgba(255, 0, 0, 0.5)', 'rgba(249, 118, 0, 0.5)', 'rgba(246, 198, 0, 0.5)', 'rgba(96, 176, 68, 0.5)', 'rgba(61, 110, 43, 0.5)'],
+  colors = ['word_red', 'word_orange', 'word_yellow', 'word_lightgreen', 'word_green'];
+
+
 function predict(word) {
   //assumes words are lower cased and cleaned
   if (word in words) {
@@ -35,7 +39,6 @@ function in_words(word) {
 function make_words_colors_dict(text) {
   var matched_words = {},
   percentiles = [-0.64, -0.25, -0.03, 0.21],
-  colors = ['rgba(255, 0, 0, 0.5)', 'rgba(249, 118, 0, 0.5)', 'rgba(246, 198, 0, 0.5)', 'rgba(96, 176, 68, 0.5)', 'rgba(61, 110, 43, 0.5)'],
   text_words = clean_split_words(text),
   stemmed_words = clean_split_words(text);
   for(var i = 0; i < text_words.length; i++) {
