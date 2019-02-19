@@ -30,15 +30,18 @@ var surveyJSON = { title: "",
     { name: "accuracy",questions: [
       { type: "radiogroup", name: "accuracy", title: "How accurate or inaccurate was the E-meter in its predictions about your writing?", choices: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}] },
     ]},
+    { name: "buttonQuestions",questions: [
+      { type: "radiogroup", visibleIf: "{condition}='transparent'", name: "transparencyAccuracy", title: "How accurate or inaccurate did you find the factors that led to your current rating (the word highlighting)?", choices: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}] , isRequired: true },
+    ] },
     { name: "trust",questions: [
       { type: "radiogroup", name: "systemTrust", title: "How trustworthy or untrustworthy did you find the E-meter system?", choices: [{value: 1, text: 'Very Untrustworthy'}, {value: 2, text: 'Untrustworthy'}, {value: 3, text: 'Slightly Untrustworthy'}, {value: 4, text:'Neither Trustworthy Nor Untrustworthy'}, {value: 5, text: 'Slightly Trustworthy'}, {value: 6, text: 'Trustworthy'}, {value: 7, text: 'Very Trustworthy'}], isRequired: true }
     ] },
     { name: "attention",questions: [
-      { type: "radiogroup", name: "attentionCheck", title: "Sorry to bother you, could you please select the third option below?", choices: [{value: false, text: 'Very Poor'}, {value: false, text: 'Poor'}, {value: true, text: 'Fair'}, {value: false, text:'Good'}, {value: false, text: 'Very Good'}, {value: false, text: 'Excellent'}, {value: false, text: 'Exceptional'}], isRequired: true }
+      { type: "radiogroup", name: "attentionCheck", title: "Please select the option labeled 'Fair' below.", choices: [{value: false, text: 'Very Poor'}, {value: false, text: 'Poor'}, {value: true, text: 'Fair'}, {value: false, text:'Good'}, {value: false, text: 'Very Good'}, {value: false, text: 'Excellent'}, {value: false, text: 'Exceptional'}], isRequired: true }
     ] },
     { name: "buttonQuestions",questions: [
-      { type: "radiogroup", visibleIf: "{condition}='transparent'", name: "buttonYesNo", title: "Did you press the \"Why am I getting this rating?\" button when completing the task?", choices: ['Yes', 'No'], isRequired: true },
-      { type: "text", visibleIf: "{buttonYesNo}='Yes'", name: "buttonWhy", title: "In general, how would you characterize the times when you pressed the button?", isRequired: true },
+      { type: "radiogroup", visibleIf: "{condition}='transparent'", name: "buttonYesNo", title: "Did you ask for the factors that led to your rating when completing the task?", choices: ['Yes', 'No'], isRequired: true },
+      { type: "text", visibleIf: "{buttonYesNo}='Yes'", name: "buttonWhy", title: "In general, how would you characterize the times when you asked for these factors?", isRequired: true },
     ] },
     { name: "buttonQuestions",questions: [
       { type: "text", visibleIf: "{condition}='control'", name: "userQuestions", title: "If the system could respond truthfully to any question, what 3 questions would you ask?", isRequired: true },
@@ -56,13 +59,14 @@ var surveyJSON = { title: "",
 // randomize the pre-survey question
 var expVioQuestion = { type: "radiogroup", name: "expectationViolation", title: "Does the rating predicted by the system match what you would expect for the text you have written so far? ", description: "The system's predicted rating is...", choices: [{ value: 1, text: "Far too negative"}, { value: 2, text: "Too negative"}, { value: 3, text: "Slightly too negative"}, { value: 4, text: "Matching what I would expect"}, { value: 5, text: "Slightly too positive"}, { value: 6, text: "Too positive"}, { value: 7, text: "Far too positive"}]},
   confusionQuestion = { type: "radiogroup", name: "confusion", title: "How much do you feel that you understand or do not understand how the system is working?", choices: [{ value: 1, text: "Completely Do Not Understand"}, { value: 2, text: "Do Not Understand"}, { value: 3, text: "Slightly Negative"},  { value: 5, text: "Slightly Positive"}, { value: 6, text: "Understand"}, { value: 7, text: "Completely Understand"}]},
+  explanationWantedQuestion = { type: "radiogroup", name: "explanationWanted", title: "Do you want to see what factors led to your current rating?", choices: ['Yes', 'No']},
+  whyExplanation = { type: "text", visibleIf: "{explanationWanted}='Yes'", name: "whyExplanation", title: "What question are you hoping to answer by viewing the factors that led to your current rating?"},
   probeQuestion = { type: "text", name: "anyQuestions", title: "If you could ask the system any question right now, what would you ask?"},
   miniPreSurveyJSON = { title: "", 
     surveyPostId: '',
     showCompletedPage: false,
     pages: [
-      { name: "miniPre", questions: [expVioQuestion,
-        { type: "text", name: "pressReason", title: "What question were you hoping to answer by clicking the button?"},
+      { name: "miniPre", questions: [expVioQuestion, explanationWantedQuestion, whyExplanation
       ] },
     ]};
 
@@ -72,7 +76,7 @@ var miniPostSurveyJSON = { title: "",
   pages: [
     { name: "miniPost", questions: [
       { type: "radiogroup", name: "understandingChange", title: "Did the information provided increase or decrease your understanding of the system's prediction?", choices: [{ value: 1, text: "Strongly Decreased My Understanding"}, { value: 2, text: "Decreased My Understanding"}, { value: 3, text: "Slightly Decreased My Understanding"}, { value: 4, text: "Did Not Change My Understanding"}, { value: 5, text: "Slightly Increased My Understanding"}, { value: 6, text: "Increased My Understanding"}, { value: 7, text: "Strongly Increased My Understanding"}]},
-      { type: "radiogroup", name: "remainingQuestionsYesNo", title: "Did the information answer the question you had when clicking the button or do you have further questions?", choices: ["Yes, my questions were answered", "No, I have further questions"]},
+      { type: "radiogroup", name: "remainingQuestionsYesNo", title: "Did the information answer the question you had when asking to see the factors that led to your current rating or do you have further questions?", choices: ["Yes, my questions were answered", "No, I have further questions"]},
       { type: "text", visibleIf: "{remainingQuestionsYesNo}='No, I have further questions'", name: "remainingQuestionContent", title: "What questions do you still have?"},
     ] },
   ]};
@@ -90,6 +94,10 @@ function initMiniPreSurvey() {
     var miniPreSurveyValues = miniPreSurvey.getAllValues()
     miniPreSurveyValues['textPoint'] = $('#text').text();
     miniPreSurveyValues['emeterValue'] = newVal;
+    if(miniPreSurvey.getAllValues()['explanationWanted'] === 'Yes') {
+      console.log('lolwut');
+      toggleTransparency();
+    }
     if(survey.getValue('miniPreSurvey' + survey.currentPage.name)) {
       var curVals = survey.getValue('miniPreSurvey' + survey.currentPage.name);
       curVals.push(miniPreSurveyValues);
@@ -98,7 +106,7 @@ function initMiniPreSurvey() {
       survey.setValue('miniPreSurvey' + survey.currentPage.name, [miniPreSurveyValues]);
     }
     $("#questionsModal").modal('toggle');
-    if (condition == 'control') {
+    if (condition == 'control' || miniPreSurveyValues['explanationWanted'] == 'No') {
       initMiniPreSurvey();
     } else {
       initMiniPostSurvey();
@@ -145,15 +153,11 @@ function sendDataToServer(survey) {
 function showEmeter() {
 	$('#textAndMeter').show();
 	$('#explanation').show();
-  if (condition == 'transparent') {
-    $('#why_button').show();
-  }
 }
 
 function hideEmeter() {
 	$('#textAndMeter').hide();
 	$('#explanation').hide();
-  $('#why_button').hide();
 }
 
 survey.onAfterRenderPage.add(function (sender, options) {
@@ -254,10 +258,10 @@ document.body.onkeyup = function(e) {
         emeterHTMLS[survey.currentPage.name] = written_text;
         emeterValue[survey.currentPage.name] = newVal;
 
-        if (condition == 'control' && (firstProbeDone == false && words.length >= 25) ) {
+        if ((firstProbeDone == false && words.length >= 25) ) {
           firstProbeDone = true;
           $("#questionsModal").modal('toggle');
-        } else if (condition == 'control' && (secondProbeDone == false && words.length >= 75) ) {
+        } else if ((secondProbeDone == false && words.length >= 75) ) {
           secondProbeDone = true;
           $("#questionsModal").modal('toggle');
         }
@@ -292,36 +296,34 @@ document.body.onkeyup = function(e) {
   }
 }
 
-$(document).ready(function() {
-  $('#why_button').click(function (e) {
-    if(currentTransparency === false) {
-      currentTransparency = true;
-    } else {
+function toggleTransparency() {
+  if(currentTransparency === true) {
+    currentTransparency = false;
+  } else {
+    currentTransparency = true;
+  }
+
+  if(currentTransparency === true) {
+    $('#why_button').show();
+    $('#legend').toggle();
+    $('#text').attr('contenteditable', 'false')
+    for (var i=0; i < colors.length; i++) {
+      $('.' + colors[i]).css('background-color', colors_vals[i]);
+    } 
+    $('#why_button').one('click', function() {
       currentTransparency = false;
-    }
-    if(currentTransparency === true) {
       $("#questionsModal").modal('toggle');
       $('#questionsModal').one('hidden.bs.modal', function () {
+        $('#why_button').hide();
         $('#legend').toggle();
-        $('#why_button').attr('value', 'Click the button again to continue writing')
-        $('#text').attr('contenteditable', 'false')
-        for (var i=0; i < colors.length; i++) {
-          $('.' + colors[i]).css('background-color', colors_vals[i]);
-        } 
-      });
-    } else {
-      $("#questionsModal").modal('toggle');
-      $('#questionsModal').one('hidden.bs.modal', function () {
-        $('#legend').toggle();
-        $('#why_button').attr('value', 'Why am I recieving this rating?')
         $('#text').attr('contenteditable', '')
         for (var i=0; i < colors.length; i++) {
           $('.' + colors[i]).css('background-color', '#fff');
         }
       });
-    }
-  });
-});
+    });
+  }
+}
 
 // device detection
 if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) 
