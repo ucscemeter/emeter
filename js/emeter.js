@@ -1,34 +1,37 @@
 var confirmationCode = 'when' + Math.floor(Math.random() * 1000000),
   condition = Math.floor(Math.random() * 2) ? 'transparent' : 'control',
-  legend = '<div id="legend" class="col-md-4" style="display:none; text-align: right;"><h3>Word Highlighting Key:</h3><br><span style="background-color:rgba(255, 0, 0, 0.5);">Very Negative</span><br><span style="background-color:rgba(249, 118, 0, 0.5);">Negative</span><br><span style="background-color:rgba(246, 198, 0, 0.5);">Slightly Negative</span><br><span style="background-color:rgba(96, 176, 68, 0.5);">Positive</span><br><span style="background-color:rgba(61, 110, 43, 0.5);">Very Positive</span><br><span>Unknown</span></div>'
+  legend = '<div id="legend" class="col-md-8 col-md-offset-2" style="display:none;"><h3>Word Highlighting Key:</h3>&nbsp;&nbsp;<span style="background-color:rgba(255, 0, 0, 0.5);">Very Negative</span>&nbsp;&nbsp;<span style="background-color:rgba(249, 118, 0, 0.5);">Negative</span>&nbsp;&nbsp;<span style="background-color:rgba(246, 198, 0, 0.5);">Slightly Negative</span>&nbsp;&nbsp;<span style="background-color:rgba(96, 176, 68, 0.5);">Positive</span>&nbsp;&nbsp;<span style="background-color:rgba(61, 110, 43, 0.5);">Very Positive</span>&nbsp;&nbsp;<span>Unknown</span></div>'
   experienceNode = null,
   currentTransparency = false;
 var began = new Date();
 var emeterHTMLS = {};
-var emeterValue = {'emeter1': 66.66, 'emeter2': 66.66};
-console.log(condition);
+var emeterValue = {'emeter1': 63.33, 'emeter2': 63.33};
 
 var surveyJSON = { title: "", 
   surveyPostId: '9fc1d2e5-62ae-4b24-b1f5-386d544c0e45',
   showProgressBar: 'bottom',
   pages: [
-    { name: "page99", questions: [
-      { type: "html", name: "Introduction", html: "<center><h2>Please read these instructions carefully</h2></center><h5>Please begin thinking of an emotional experience that happened to you within the past week that you can write 100 words about. On the next page you will be using the E-meter system which assesses the positivity or negativity of your writing.</h5>"},
-      { type: "html", visibleIf: "{condition}='transparent'", name: "TransparentIntro", html: '<h5>Within the E-meter is a button labeled "Why am I recieving this rating?" This button will show the different factors that lead to the calculation of the overall rating. When this button is pressed, you will be asked to answer 2 short questions. After you are done looking at the word highlighting, clicking the button will allow you to continue writing after answering 2 more short questions.</h5><center><img src="img/emeterinteractivetransparentdemo.gif" style="width:50%"></img></center>'},
+    { name: "instructions1", questions: [
+      { type: "html", name: "Introduction", html: "<center><h2>Please read these instructions carefully</h2></center>"},
+      { type: "html", name: "Introduction", html: '<h5>This is the E-meter, a system that asseses the positive and negative mood of writing within it. The positive or negative rating is shown by the overall value in the gauge.</h5><center><img src="img/controlgif.gif" style="width:50%"></img></center><h5>In this HIT, you will be using the E-meter to write about an emotional experience that you have had in the past week or two and then you will answer some questions about your experience with the E-meter.'},
+    ] },
+    { name: "instructions2", questions: [
+      { type: "html", visibleIf: "{condition}='transparent'", name: "TransparentIntro", html: '<h5>While you are writing within the E-meter you will occasionally be asked some questions that pop up. One of these questions looks like this: </h5><center><img src="img/transparencyquestion.png" style="width:50%"></img></center><h5> If you answer this question "Yes", then you will be shown highlighting which conveys how your overall rating is calculated. <center><img src="img/highlighting.png" style="width:50%"></img></center> After viewing this, you can continue writing within the system by pressing this button: <center><img src="img/write_button.png" style="width:50%"></img></center> When this button is pressed, you will be asked to answer 2 short questions. After you are done looking at the word highlighting, clicking the button will allow you to continue writing.</h5>'},
       { type: "html", visibleIf: "{condition}='control'", name: "Control Intro", html: '<h5>At certain times while you are writing, the E-meter will prompt you to answer a few questions. Please answer the questions to the best of your ability and then continue writing. An example of this prompt is shown on the looped video below.</h5><center><img src="img/emeterinteractivecontroldemo.gif" style="width:50%"></img></center>'},
+      { type: "html", name: "Control Intro", html: '<h5>On the next page you will begin using the E-meter. Please begin thinking of an emotional experience that you can write about within the E-meter. Click the "Next" button whenever you are ready.'},
     ] },
     { name:"emeter1", questions: [ 
-      { type: "html", name: "experiences", title:"experience", html:'<div id="expquestion"><center><h5> The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the prompt below. Please write at least 100 words about an emotional experience that affected you in the last week.</h5></center><center><span id="wordcount">0/100 words</span></center><div id="text" contenteditable class="textarea form-control"></div></div>', isRequired: true }
+      { type: "html", name: "experiences1", title:"experience", html:'<div id="expquestion"><center><h5> The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the prompt below. Please write at least 100 words about an emotional experience that affected you in the last week.</h5></center><center><span id="wordcount">0/100 words</span></center><div id="text" contenteditable class="textarea form-control"></div></div>'}
     ]},
   { name: "page98", questions: [
       { type: "html", name: "Introduction", html: "<h5>You will have one more chance to use the E-meter system before making an evaluation. Please again think of an emotional experience that happened to you within the past week that you can write 100 words about. When you are ready you may move to the next page.</h5>"},
     ] },
 
     { name:"emeter2", questions: [ 
-          { type: "html", name: "experiences2", title:"experience2", html:'<div id="expquestion"><center><h5>Please write at least 100 words about an emotional experience that affected you in the last week.</h5></center><center><span id="wordcount">0/100 words</span></center><div id="text" contenteditable class="textarea form-control"></div></div>', isRequired: true }
+          { type: "html", name: "experiences2", title:"experience2", html:'<div id="expquestion"><center><h5>Please write at least 100 words about an emotional experience that affected you in the last week.</h5></center><center><span id="wordcount">0/100 words</span></center><div id="text" contenteditable class="textarea form-control"></div></div>'}
     ]},
     { name: "accuracy",questions: [
-      { type: "radiogroup", name: "accuracy", title: "How accurate or inaccurate was the E-meter in its predictions about your writing?", choices: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}] },
+      { type: "radiogroup", name: "accuracy", title: "How accurate or inaccurate was the E-meter in its predictions about your writing?", choices: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}], isRequired: true  },
     ]},
     { name: "buttonQuestions",questions: [
       { type: "radiogroup", visibleIf: "{condition}='transparent'", name: "transparencyAccuracy", title: "How accurate or inaccurate did you find the factors that led to your current rating (the word highlighting)?", choices: [{ value: 1, text: "Very Inaccurate"}, { value: 2, text: "Inaccurate"}, { value: 3, text: "Slightly Inaccurate"}, { value: 4, text: "Neither Accurate Nor Inaccurate"}, { value: 5, text: "Slightly Accurate"}, { value: 6, text: "Accurate"}, { value: 7, text: "Very Accurate"}] , isRequired: true },
@@ -37,14 +40,18 @@ var surveyJSON = { title: "",
       { type: "radiogroup", name: "systemTrust", title: "How trustworthy or untrustworthy did you find the E-meter system?", choices: [{value: 1, text: 'Very Untrustworthy'}, {value: 2, text: 'Untrustworthy'}, {value: 3, text: 'Slightly Untrustworthy'}, {value: 4, text:'Neither Trustworthy Nor Untrustworthy'}, {value: 5, text: 'Slightly Trustworthy'}, {value: 6, text: 'Trustworthy'}, {value: 7, text: 'Very Trustworthy'}], isRequired: true }
     ] },
     { name: "attention",questions: [
-      { type: "radiogroup", name: "attentionCheck", title: "Please select the option labeled 'Fair' below.", choices: [{value: false, text: 'Very Poor'}, {value: false, text: 'Poor'}, {value: true, text: 'Fair'}, {value: false, text:'Good'}, {value: false, text: 'Very Good'}, {value: false, text: 'Excellent'}, {value: false, text: 'Exceptional'}], isRequired: true }
+      { type: "radiogroup", name: "attentionCheck", title: "Please select the option labeled 'Fair' below.", choices: [{value: 1, text: 'Very Poor'}, {value: 2, text: 'Poor'}, {value: 'Passes Check', text: 'Fair'}, {value: 3, text:'Good'}, {value: 4, text: 'Very Good'}, {value: 5, text: 'Excellent'}, {value: 6, text: 'Exceptional'}], isRequired: true }
     ] },
     { name: "buttonQuestions",questions: [
       { type: "radiogroup", visibleIf: "{condition}='transparent'", name: "buttonYesNo", title: "Did you ask for the factors that led to your rating when completing the task?", choices: ['Yes', 'No'], isRequired: true },
-      { type: "text", visibleIf: "{buttonYesNo}='Yes'", name: "buttonWhy", title: "In general, how would you characterize the times when you asked for these factors?", isRequired: true },
+      { type: "text", visibleIf: "{buttonYesNo}='Yes'", name: "buttonWhy", title: "In general, how would you characterize why you asked for these factors?", isRequired: true },
     ] },
-    { name: "buttonQuestions",questions: [
-      { type: "text", visibleIf: "{condition}='control'", name: "userQuestions", title: "If the system could respond truthfully to any question, what 3 questions would you ask?", isRequired: true },
+    { name: "userQuestions",questions: [
+      { type: "text", visibleIf: "{condition}='control'", name: "userQuestions", title: "If the system could respond truthfully to any question while you were using it, what 3 questions would you ask?", isRequired: true },
+    ] },
+    { name: "pilotQuestions",questions: [
+      { type: "text", name: "problems", title: "Did you experience any problems in your use of the system? If so, what were they?", isRequired: true },
+      { type: "text", name: "unclear", title: "Were there any questions that were unclear? If so, what were they?", isRequired: true },
     ] },
 
 
@@ -52,16 +59,15 @@ var surveyJSON = { title: "",
       //add debrief  (
       { type: "html", name: "confirmationCode", html: "<h3>Confirmation Code: " + confirmationCode + "</h3><p>Please copy and paste this into the Mechanical Turk survey code field</p>"},
     ] }
-
   ]
 };
 
 // randomize the pre-survey question
-var expVioQuestion = { type: "radiogroup", name: "expectationViolation", title: "Does the rating predicted by the system match what you would expect for the text you have written so far? ", description: "The system's predicted rating is...", choices: [{ value: 1, text: "Far too negative"}, { value: 2, text: "Too negative"}, { value: 3, text: "Slightly too negative"}, { value: 4, text: "Matching what I would expect"}, { value: 5, text: "Slightly too positive"}, { value: 6, text: "Too positive"}, { value: 7, text: "Far too positive"}]},
-  confusionQuestion = { type: "radiogroup", name: "confusion", title: "How much do you feel that you understand or do not understand how the system is working?", choices: [{ value: 1, text: "Completely Do Not Understand"}, { value: 2, text: "Do Not Understand"}, { value: 3, text: "Slightly Negative"},  { value: 5, text: "Slightly Positive"}, { value: 6, text: "Understand"}, { value: 7, text: "Completely Understand"}]},
-  explanationWantedQuestion = { type: "radiogroup", name: "explanationWanted", title: "Do you want to see what factors led to your current rating?", choices: ['Yes', 'No']},
-  whyExplanation = { type: "text", visibleIf: "{explanationWanted}='Yes'", name: "whyExplanation", title: "What question are you hoping to answer by viewing the factors that led to your current rating?"},
-  probeQuestion = { type: "text", name: "anyQuestions", title: "If you could ask the system any question right now, what would you ask?"},
+var expVioQuestion = { type: "radiogroup", name: "expectationViolation", title: "Does the rating predicted by the system match what you would expect for the text you have written so far? ", description: "The system's predicted rating is...", choices: [{ value: 1, text: "Far too negative"}, { value: 2, text: "Too negative"}, { value: 3, text: "Slightly too negative"}, { value: 4, text: "Matching what I would expect"}, { value: 5, text: "Slightly too positive"}, { value: 6, text: "Too positive"}, { value: 7, text: "Far too positive"}], isRequired: true },
+  confusionQuestion = { type: "radiogroup", name: "confusion", title: "How much do you feel that you understand or do not understand how the system is working?", choices: [{ value: 1, text: "Completely Do Not Understand"}, { value: 2, text: "Do Not Understand"}, { value: 3, text: "Slightly Negative"},  { value: 5, text: "Slightly Positive"}, { value: 6, text: "Understand"}, { value: 7, text: "Completely Understand"}], isRequired: true },
+  explanationWantedQuestion = { type: "radiogroup", name: "explanationWanted", title: "Do you want to see what factors led to your current rating?", choices: ['Yes', 'No'], isRequired: true },
+  whyExplanation = { type: "text", visibleIf: "{explanationWanted}='Yes'", name: "whyExplanation", title: "Before we show you, what question(s) are you hoping to answer by viewing the factors that led to your current rating?", isRequired: true },
+  probeQuestion = { type: "text", name: "anyQuestions", title: "If you could ask the system any question right now, what would you ask?", isRequired: true },
   miniPreSurveyJSON = { title: "", 
     surveyPostId: '',
     showCompletedPage: false,
@@ -75,9 +81,9 @@ var miniPostSurveyJSON = { title: "",
   showCompletedPage: false,
   pages: [
     { name: "miniPost", questions: [
-      { type: "radiogroup", name: "understandingChange", title: "Did the information provided increase or decrease your understanding of the system's prediction?", choices: [{ value: 1, text: "Strongly Decreased My Understanding"}, { value: 2, text: "Decreased My Understanding"}, { value: 3, text: "Slightly Decreased My Understanding"}, { value: 4, text: "Did Not Change My Understanding"}, { value: 5, text: "Slightly Increased My Understanding"}, { value: 6, text: "Increased My Understanding"}, { value: 7, text: "Strongly Increased My Understanding"}]},
-      { type: "radiogroup", name: "remainingQuestionsYesNo", title: "Did the information answer the question you had when asking to see the factors that led to your current rating or do you have further questions?", choices: ["Yes, my questions were answered", "No, I have further questions"]},
-      { type: "text", visibleIf: "{remainingQuestionsYesNo}='No, I have further questions'", name: "remainingQuestionContent", title: "What questions do you still have?"},
+      { type: "radiogroup", name: "understandingChange", title: "Did the information provided increase or decrease your understanding of the system's prediction?", choices: [{ value: 1, text: "Strongly Decreased My Understanding"}, { value: 2, text: "Decreased My Understanding"}, { value: 3, text: "Slightly Decreased My Understanding"}, { value: 4, text: "Did Not Change My Understanding"}, { value: 5, text: "Slightly Increased My Understanding"}, { value: 6, text: "Increased My Understanding"}, { value: 7, text: "Strongly Increased My Understanding"}], isRequired: true },
+      { type: "radiogroup", name: "remainingQuestionsYesNo", title: "Did the information answer the question you had when asking to see the factors that led to your current rating or do you have further questions?", choices: ["Yes, my questions were answered", "No, I have further questions"], isRequired: true },
+      { type: "text", visibleIf: "{remainingQuestionsYesNo}='No, I have further questions'", name: "remainingQuestionContent", title: "What questions do you still have?", isRequired: true },
     ] },
   ]};
 
@@ -90,12 +96,10 @@ function initMiniPreSurvey() {
   miniPreSurvey = new Survey.Survey(miniPreSurveyJSON, "miniSurvey");
 
   miniPreSurvey.onComplete.add(function () {
-    console.log(miniPreSurvey.getAllValues());
     var miniPreSurveyValues = miniPreSurvey.getAllValues()
     miniPreSurveyValues['textPoint'] = $('#text').text();
     miniPreSurveyValues['emeterValue'] = newVal;
     if(miniPreSurvey.getAllValues()['explanationWanted'] === 'Yes') {
-      console.log('lolwut');
       toggleTransparency();
     }
     if(survey.getValue('miniPreSurvey' + survey.currentPage.name)) {
@@ -118,9 +122,8 @@ function initMiniPreSurvey() {
 function initMiniPostSurvey() {
   miniPostSurvey = new Survey.Survey(miniPostSurveyJSON, "miniSurvey");
   miniPostSurvey.onComplete.add(function () {
-    console.log(miniPostSurvey.getAllValues());
-    if(survey.getValue('miniPostSurvey')) {
-      var curVals = survey.getValue('miniPostSurvey');
+    if(survey.getValue('miniPostSurvey' + survey.currentPage.name)) {
+      var curVals = survey.getValue('miniPostSurvey' + survey.currentPage.name);
       curVals.push(miniPostSurvey.getAllValues());
       survey.setValue('miniPostSurvey' + survey.currentPage.name, curVals)
     } else {
@@ -135,8 +138,16 @@ var miniPostSurvey;
 var miniPreSurveyJSON;
 initMiniPreSurvey();
 
+function surveyValidateQuestion(s, options) {
+  if (options.name.startsWith('experiences')) {
+    if ( $('#text').text().split(/\s+/).length < 100) { //this will fail if you go forward then go back
+      options.error = "Please write at least 100 words about your experience";
+    }
+  }
+}
 
-var survey = new Survey.Survey(surveyJSON, "surveyContainer");
+window.survey = new Survey.Model(surveyJSON);
+$("#surveyContainer").Survey({model: survey, onValidateQuestion: surveyValidateQuestion});
 survey.sendResultOnPageNext = true;
 //Use onComplete event to save the data           
 survey.clientId = Math.random();
@@ -158,13 +169,17 @@ function showEmeter() {
 function hideEmeter() {
 	$('#textAndMeter').hide();
 	$('#explanation').hide();
+  $('#why_button').hide();
 }
+
 
 survey.onAfterRenderPage.add(function (sender, options) {
   if (survey.currentPage.name == 'emeter1') {
     chart.load({
       columns: [['Rating', emeterValue[survey.currentPage.name]]]
     });
+    $('.c3-chart-arcs-gauge-max').text('Positive');
+    $('.c3-chart-arcs-gauge-min').text('Negative');
     showEmeter();
     if (emeterHTMLS[survey.currentPage.name] != true) {
       $('#text').html(emeterHTMLS[survey.currentPage.name]);
@@ -174,12 +189,9 @@ survey.onAfterRenderPage.add(function (sender, options) {
     } else {
       $('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the prompt below.');
       $('#expquestion').after(legend);
-      $('#expquestion').addClass("col-md-8");
     }
     experienceNode = $('#expquestion');
   } else if (survey.currentPage.name == 'emeter2') {
-    firstProbeDone = false;
-    secondProbeDone = false;
     initMiniPreSurvey();
     chart.load({
       columns: [['Rating', emeterValue[survey.currentPage.name]]]
@@ -190,7 +202,6 @@ survey.onAfterRenderPage.add(function (sender, options) {
     } else {
       $('#explanation').text('The graphic above displays the output from an algorithm that assesses the positivity/negativity of your writing as you answer the prompt below.');
       $('#expquestion').after(legend);
-      $('#expquestion').addClass("col-md-8");
     }		if (emeterHTMLS[survey.currentPage.name] != true) {
       $('#text').html(emeterHTMLS[survey.currentPage.name]);
     }
@@ -201,36 +212,46 @@ survey.onAfterRenderPage.add(function (sender, options) {
 });
 
 var chart = c3.generate({
-    bindto: "#emeter",
-    data: {
-        columns: [
-            ['Rating', 63.333]
-        ],
-        type: 'gauge',
-    },
-    gauge: {
-        label: {
-            format: function(value, ratio) {
-                return '';
-            },
-            show: false // to turn off the min/max labels.
-        },
-//    min: 0, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
-//    max: 100, // 100 is default
-//    units: ' %',
-//    width: 39 // for adjusting arc thickness
-    },
-    color: {
-        pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044', '#3d6e2b'], // the three color levels for the percentage values.
-        threshold: {
-//            unit: 'value', // percentage is default
-//            max: 200, // 100 is default
-            values: [15, 35, 50, 75]
+  bindto: "#emeter",
+  data: {
+    columns: [
+      ['Rating', 63.333]
+    ],
+    type: 'gauge',
+  },
+  legend: {
+    show: false
+  },
+  gauge: {
+    label: {
+      format: function(value, ratio) {
+        return '';
+      },
+      extents: function (value, isMax) {
+        if (isMax) {
+          return 'Positive';
+        } else {
+          return 'Negative';
         }
+      },
+      show: true // to turn off the min/max labels.
     },
-    size: {
-        height: 280
+    //    min: 0, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
+    //    max: 100, // 100 is default
+    //    units: ' %',
+    //    width: 39 // for adjusting arc thickness
+  },
+  color: {
+    pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044', '#3d6e2b'], // the three color levels for the percentage values.
+    threshold: {
+      //            unit: 'value', // percentage is default
+      //            max: 200, // 100 is default
+      values: [15, 35, 50, 75]
     }
+  },
+  size: {
+    height: 300
+  }
 });
 
 var direction = Math.round(Math.random())
@@ -242,8 +263,7 @@ if (direction == 0) {
 
 var lastWord = '',
     timerOn = false,
-    firstProbeDone = false,
-    secondProbeDone = false,
+    probes = {"first": [], "second": [], "third": []}
     newVal = -1;
 document.body.onkeyup = function(e) {
   if ([32,8,13,190,188,49,191,186].includes(e.keyCode)) {
@@ -258,11 +278,14 @@ document.body.onkeyup = function(e) {
         emeterHTMLS[survey.currentPage.name] = written_text;
         emeterValue[survey.currentPage.name] = newVal;
 
-        if ((firstProbeDone == false && words.length >= 25) ) {
-          firstProbeDone = true;
+        if ((probes['first'].includes(survey.currentPage.name) == false && words.length >= 33) ) {
+          probes['first'].push(survey.currentPage.name);
           $("#questionsModal").modal('toggle');
-        } else if ((secondProbeDone == false && words.length >= 75) ) {
-          secondProbeDone = true;
+        } else if ((probes['second'].includes(survey.currentPage.name) == false && words.length >= 66) ) {
+          probes['second'].push(survey.currentPage.name);
+          $("#questionsModal").modal('toggle');
+        } else if ((probes['third'].includes(survey.currentPage.name) == false && words.length >= 99) ) {
+          probes['third'].push(survey.currentPage.name);
           $("#questionsModal").modal('toggle');
         }
 
