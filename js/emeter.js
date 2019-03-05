@@ -1,5 +1,6 @@
 var confirmationCode = 'h1n1' + Math.floor(Math.random() * 1000000),
-  condition = Math.floor(Math.random() * 2) ? 'transparent' : 'control',
+  //condition = Math.floor(Math.random() * 2) ? 'transparent' : 'control',
+  condition = 'transparent',
   legend = '<div id="legend" class="col-md-8 col-md-offset-2" style="display:none;"><h3>Word Highlighting Key:</h3>&nbsp;&nbsp;<span style="background-color:rgba(255, 0, 0, 0.5);">Very Negative</span>&nbsp;&nbsp;<span style="background-color:rgba(249, 118, 0, 0.5);">Negative</span>&nbsp;&nbsp;<span style="background-color:rgba(246, 198, 0, 0.5);">Slightly Negative</span>&nbsp;&nbsp;<span style="background-color:rgba(96, 176, 68, 0.5);">Positive</span>&nbsp;&nbsp;<span style="background-color:rgba(61, 110, 43, 0.5);">Very Positive</span>&nbsp;&nbsp;<span>Unknown</span></div>'
   experienceNode = null,
   currentTransparency = false;
